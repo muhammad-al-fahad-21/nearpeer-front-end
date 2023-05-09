@@ -1,0 +1,30 @@
+{
+  "name": "front-end",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "autoprefixer": "10.4.14",
+    "axios": "^1.4.0",
+    "bcrypt": "^5.1.0",
+    "bootstrap": "^5.2.3",
+    "mongodb": "^5.4.0",
+    "mongoose": "^7.1.0",
+    "next": "13.4.1",
+    "next-auth": "^4.22.1",
+    "postcss": "8.4.23",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-router-dom": "^5.1.2",
+    "tailwindcss": "3.3.2"
+  },
+  "devDependencies": {
+    "@types/react": "18.2.6",
+    "typescript": "5.0.4"
+  }
+}
