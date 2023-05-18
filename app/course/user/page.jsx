@@ -52,7 +52,7 @@ const Courses = () => {
         
     fetchProfile(token)
 
-  }, [Date.now()])
+  }, [])
 
   if(!isAuth) return(<></>)
   

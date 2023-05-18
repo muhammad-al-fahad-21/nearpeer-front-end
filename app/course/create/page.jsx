@@ -50,15 +50,16 @@ const Create = () => {
 
     fetchProfile(token)
 
-  }, [Date.now()])
+  }, [])
 
   const handleSubmit = async (props) => {
     props.preventDefault()
 
     const token = localStorage.getItem('token')
     if(!token) return setCourse({...course, err: 'Please sign in to continue!', success: ''})
+    if(rating < 0 && rating > 100) return setCourse({...course, err: 'Rating range is (0 - 100)', success: ''})
 
-    const field = !title ? 'title' : !publisher ? 'publisher' : !upload_date ? 'upload_date' : ''
+    const field = !title ? 'Title' : !publisher ? 'Publisher' : !lastest_update ? 'Latest Update' : !upload_date ? 'Upload Date' : ''
 
     if(field !== '') return setCourse({...course, err: `Please fill the ${field} field!`, success: ''})
 

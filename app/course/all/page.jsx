@@ -52,7 +52,7 @@ const AllCourses = () => {
         
     fetchProfile(token)
 
-  }, [Date.now()])
+  }, [])
   
   return (
     <>

@@ -53,7 +53,7 @@ const Users = () => {
         
     fetchProfile(token)
 
-  }, [Date.now()])
+  }, [])
   
   return (
     <>

@@ -36,7 +36,7 @@ const isAdmin = ({params: {id}}) => {
 
     fetchProfile(token)
 
-  }, [Date.now()])
+  }, [])
 
   useEffect(() => {
 
