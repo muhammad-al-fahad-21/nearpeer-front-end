@@ -59,7 +59,7 @@ const Create = () => {
     if(!token) return setCourse({...course, err: 'Please sign in to continue!', success: ''})
     if(rating < 0 && rating > 100) return setCourse({...course, err: 'Rating range is (0 - 100)', success: ''})
 
-    const field = !title ? 'Title' : !publisher ? 'Publisher' : !lastest_update ? 'Latest Update' : !upload_date ? 'Upload Date' : ''
+    const field = !title ? 'Title' : !publisher ? 'Publisher' : !upload_date ? 'Upload Date' : ''
 
     if(field !== '') return setCourse({...course, err: `Please fill the ${field} field!`, success: ''})
 

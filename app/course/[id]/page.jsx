@@ -76,7 +76,7 @@ const Update = ({ params: {id} }) => {
     token && setIsAuth(true);
     if (!token) return setCourse({...course, err: 'Please sign in to continue!', success: ''});
 
-    const field = !title ? 'title' : !publisher ? 'publisher' : !upload_date ? 'upload_date' : ''
+    const field = !title ? 'title' : !publisher ? 'publisher' : !lastest_update ? 'Latest Update' : !upload_date ? 'upload_date' : ''
 
     if(field !== '') return setCourse({...course, err: `Please fill the ${field} field!`, success: ''})
 
