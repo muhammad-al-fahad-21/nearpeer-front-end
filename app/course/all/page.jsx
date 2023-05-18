@@ -1,20 +1,20 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import User from '../../components/getAllUsers'
-import Access_denied from '../../components/access_denied'
-import userDetailsService from '../../services/userDetailsService'
-import Message from '../../components/message'
-import Navbar from '../../components/navbar'
+import {useEffect, useState} from 'react'
+import courseService from '../../../services/courseService'
+import userDetailsService from '../../../services/userDetailsService'
+import Message from '../../../components/message'
+import Navbar from '../../../components/navbar'
+import Courses from '../../../components/getAllCourses'
+import Access_denied from '../../../components/access_denied'
 
-const Users = () => {
+const AllCourses = () => {
 
-  const [isRoot, setIsRoot] = useState(false)
-  const [isAuth, setIsAuth] = useState(false)
   const [isAdmin, setIsAdmin] = useState(false)
+  const [isAuth, setIsAuth] = useState(false)
   const [err, setErr] = useState('')
   const [success, setSuccess] = useState('')
-  const [user, setUser] = useState([])
+  const [course, setCourse] = useState([])
   const [tokenUser, setTokenUser] = useState(null)
 
   useEffect(() => {
@@ -24,16 +24,16 @@ const Users = () => {
     setTokenUser(token)
 
     const fetchCourses = async (token) => {
-        const data = await userDetailsService.getAllUsers(token)
+        const data = await courseService.getAllCourses(token)
 
         if(data && !data.success) return setErr(data.msg)
     
-        setUser(data.user)
+        setCourse(data.course)
     }
       
     fetchCourses(token)
 
-  }, [isRoot])
+  }, [isAdmin])
 
   useEffect(() => {
 
@@ -47,8 +47,7 @@ const Users = () => {
 
         if(data && !data.success) return setErr(data.msg)
 
-        data && data.user && setIsRoot(data.user.root)
-        setIsAdmin(data.user.admin)
+        data && data.user && setIsAdmin(data.user.admin)
     }
         
     fetchProfile(token)
@@ -57,17 +56,17 @@ const Users = () => {
   
   return (
     <>
-        <title> All Users </title>
+        <title> All Courses </title>
         <Navbar isAuth={isAuth} setIsAuth={setIsAuth} admin={isAdmin}/>
-        <Message err={err} success={success}/>
+        <Message err={err} success={success}/> 
 
         {
           isAdmin
-          ? <User allUser={user} token={tokenUser} setErr={setErr} setSuccess={setSuccess} isRoot={isRoot}/>
+          ? <Courses course={course} token={tokenUser} setErr={setErr} setSuccess={setSuccess}/>
           : isAuth && <Access_denied/>
         }
     </>
   )
 }
 
-export default Users
+export default AllCourses

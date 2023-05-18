@@ -7,7 +7,7 @@ class UserDetailsService {
             next: { revalidate: 60 },
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': `${token}`
+              'Authorization': token
             }
         })
 
@@ -18,9 +18,25 @@ class UserDetailsService {
 
         const res = await fetch(`${process.env.BASE_URL}/api/user/profile`, {
             method: "GET",
+            next: { revalidate: 60 },
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': `${token}`
+              'Authorization': token
+            }
+        })
+
+        return res.json()
+    }
+
+    async getUserInformation(token, id) {
+
+        const res = await fetch(`${process.env.BASE_URL}/api/user/info`, {
+            method: "GET",
+            next: { revalidate: 60 },
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': token,
+              'id': id
             }
         })
 
@@ -33,7 +49,7 @@ class UserDetailsService {
             method: "PUT",
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': `${token}`
+              'Authorization': token
             },
             body: JSON.stringify(put)
         })
@@ -43,13 +59,26 @@ class UserDetailsService {
 
     async updateUser(token, put) {
 
-        const res = await fetch(`${process.env.BASE_URL}/api/user`, {
+        const res = await fetch(`${process.env.BASE_URL}/api/user/profile`, {
             method: "PUT",
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': `${token}`
+              'Authorization': token
             },
             body: JSON.stringify(put)
+        })
+
+        return res.json()
+    }
+
+    async deleteUser(token, id) {
+        const res = await fetch(`${process.env.BASE_URL}/api/user`, {
+            method: "DELETE",
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': token,
+              'id': id
+            }
         })
 
         return res.json()

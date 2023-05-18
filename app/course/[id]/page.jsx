@@ -20,11 +20,12 @@ const initialState = {
   success: ''
 }
 
-const Create = () => {
+const Update = ({ params: {id} }) => {
 
   const [course, setCourse] = useState(initialState)
-  const [isAdmin, setIsAdmin] = useState(false)
   const [isAuth, setIsAuth] = useState(false)
+  const [isAdmin, setIsAdmin] = useState(false)
+
   const {user_id, title, description, rating, publisher, lastest_update, upload_date, err, success} = course
 
   const handleChangeInput = (props) => {
@@ -34,35 +35,52 @@ const Create = () => {
 
   useEffect(() => {
 
-    const token = localStorage.getItem('token')
-    token && setIsAuth(true)
+    const token = localStorage.getItem('token');
+    token && setIsAuth(true);
+    if (!token) return setCourse({...course, err: 'Please sign in to continue!', success: ''});
 
-    if(!token) return setCourse({...course, err: 'Please sign in to continue!', success: ''})
+    const fetchProfile = async (token) => {
+        const data = await courseService.getCourse(token, id)
+
+        if(data && !data.success) return setCourse({...course, err: data.msg, success: ''})
+
+        setCourse({...course, user_id: data.course.user_id, title: data.course.title, description: data.course.description, rating: data.course.rating, publisher: data.course.publisher, lastest_update: data.course.lastest_update, upload_date: data.course.upload_date, err: '', success: ''})
+    }
+      
+    fetchProfile(token)
+
+  }, [isAdmin])
+
+  useEffect(() => {
+
+    const token = localStorage.getItem('token');
+    token && setIsAuth(true);
+    if (!token) return setCourse({...course, err: 'Please sign in to continue!', success: ''});
 
     const fetchProfile = async (token) => {
         const data = await userDetailsService.getUserProfile(token)
 
         if(data && !data.success) return setCourse({...course, err: data.msg, success: ''})
 
-        setCourse({...course, publisher: data.user.name, err: '', success: ''})
         setIsAdmin(data.user.admin)
     }
 
-    fetchProfile(token)
+      fetchProfile(token)
 
-  }, [Date.now()])
+  }, [])
 
   const handleSubmit = async (props) => {
     props.preventDefault()
 
-    const token = localStorage.getItem('token')
-    if(!token) return setCourse({...course, err: 'Please sign in to continue!', success: ''})
+    const token = localStorage.getItem('token');
+    token && setIsAuth(true);
+    if (!token) return setCourse({...course, err: 'Please sign in to continue!', success: ''});
 
     const field = !title ? 'title' : !publisher ? 'publisher' : !upload_date ? 'upload_date' : ''
 
     if(field !== '') return setCourse({...course, err: `Please fill the ${field} field!`, success: ''})
 
-    const data = await courseService.createUserCourses(token, user_id, {title, description, rating, publisher, lastest_update, upload_date})
+    const data = await courseService.updateCourse(token, id, user_id, {title, description, rating, publisher, lastest_update, upload_date})
 
     if(!data.success) return setCourse({...course, err: data.msg, success: ''})
 
@@ -72,16 +90,17 @@ const Create = () => {
 
   return (
     <>
-    <title> Create Course </title>
+    <title> Update Course </title>
     <Navbar isAuth={isAuth} setIsAuth={setIsAuth} admin={isAdmin}/>
     <Message err={err} success={success}/> 
+  
     {
       isAdmin
-      ? <Course course={course} handleSubmit={handleSubmit} handleChangeInput={handleChangeInput}/>
+      ? <Course course={course} handleSubmit={handleSubmit} handleChangeInput={handleChangeInput} id={id}/>
       : <AcessDenied/>
     }
     </>
   )
 }
 
-export default Create
+export default Update

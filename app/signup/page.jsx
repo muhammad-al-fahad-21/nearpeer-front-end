@@ -1,9 +1,9 @@
 'use client'
 
-import React, {useState } from "react"
-import Link from 'next/link'
-import { showErrMsg, showSuccessMsg } from '../../components/notification'
+import React, {useState, useEffect } from "react"
+import Message from '../../components/message'
 import signupService from '../../services/signupService'
+import Navbar from '../../components/navbar'
 
 const initialState = {
     name: '',
@@ -21,6 +21,7 @@ const initialState = {
 const Signup = () => {
 
     const [user, setUser] = useState(initialState)
+    const [isAuth, setIsAuth] = useState(false)
 
     const {name, email, password, confirm_password, city, dob, phone, gender, err, success} = user
 
@@ -28,6 +29,11 @@ const Signup = () => {
         const {name, value} = props.target
         setUser({...user, [name]:value, err: '', success: ''})
     }
+
+    useEffect(() => {
+        const token = localStorage.getItem('token')
+        token && setIsAuth(true)
+    }, [])
 
     const handleSubmit = async (props) => {
         props.preventDefault()
@@ -47,13 +53,9 @@ const Signup = () => {
     return (
         <>
         <title> Signup </title>
-        <div style={{alignItems: 'center', width: '30%', margin: '10px', marginLeft: '35%'}}>
-            {err && showErrMsg(err)}
-            {success && showSuccessMsg(success)}
-        </div>
+        <Navbar isAuth={isAuth} setIsAuth={setIsAuth}/>
+        <Message err={err} success={success}/>
         <div className="login_page">
-            <h2>Register</h2>
-
             <form onSubmit={handleSubmit}>
                 <div>
                     <label htmlFor="name">Name</label>
@@ -97,7 +99,7 @@ const Signup = () => {
                     value={phone} name="phone" onChange={handleChangeInput} />
                 </div>
 
-                <div>
+                <div className="custom-select">
                     <label htmlFor="gender"> Gender </label>
                     <select id="gender" value={gender} name="gender" onChange={handleChangeInput}>
                         <option value="select">Select</option>
@@ -110,8 +112,6 @@ const Signup = () => {
                     <button type="submit">Register</button>
                 </div>
             </form>
-
-            <p>Already have an account? <Link href="/login" style={{color: 'red', marginTop: '10px'}}>Login Now</Link></p>
         </div>
         </>
     )

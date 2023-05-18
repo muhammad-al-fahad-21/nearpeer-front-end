@@ -1,9 +1,9 @@
 'use client'
 
-import React, { useState } from "react"
-import { showErrMsg, showSuccessMsg } from '../../components/notification'
+import React, { useState, useEffect } from "react"
+import Message from '../../components/message'
 import loginService from '../../services/loginService'
-import Link from "next/link"
+import Navbar from '../../components/navbar'
 
 const initialState = {
   email: '',
@@ -15,6 +15,7 @@ const initialState = {
 const Login = () => {
 
   const [user, setUser] = useState(initialState)
+  const [isAuth, setIsAuth] = useState(false)
 
   const {email, password, err, success} = user
 
@@ -22,6 +23,11 @@ const Login = () => {
     const {name, value} = props.target
     setUser({...user, [name]:value, err: '', success: ''})
   }
+
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    token && setIsAuth(true)
+  }, [])
 
   const handleSubmit = async (props) => {
     props.preventDefault()
@@ -41,13 +47,9 @@ const Login = () => {
     <>
       <title> Login </title>
       
-      <div style={{alignItems: 'center', width: '30%', margin: '10px', marginLeft: '35%'}}>
-        {err && showErrMsg(err)}
-        {success && showSuccessMsg(success)}
-      </div>
+      <Navbar isAuth={isAuth} setIsAuth={setIsAuth} type="login"/>
+      <Message err={err} success={success}/>
         <div className="login_page">
-            <h2>Login</h2>
-
             <form onSubmit={handleSubmit}>
                 <div>
                     <label htmlFor="email">Email Address</label>
@@ -64,8 +66,6 @@ const Login = () => {
                 <div className="row">
                     <button type="submit" >Login</button>
                 </div>
-
-                <p>You don't have an account? <Link href="/signup" style={{color: 'red', marginTop: '10px'}}>Register Now</Link></p>
             </form>
         </div>
     </>

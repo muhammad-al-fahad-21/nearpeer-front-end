@@ -4,27 +4,32 @@
 @tailwind components;
 @tailwind utilities;
 
-/* 
-  Note: The styles for this gradient grid background is heavily inspired by the creator of this amazing site (https://dub.sh) – all credits go to them! 
-*/
-
-.main {
-  width: 100vw;
-  min-height: 100vh;
-  position: fixed;
-  display: flex;
-  justify-content: center;
-  padding: 120px 24px 160px 24px;
-  pointer-events: none;
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
 }
 
-@media screen and (max-width: 640px) {
-  .main {
-    padding: 0;
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
   }
 }
 
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
 .errMsg{
+  width: 50%;
   background: rgb(214, 10, 10);
   color: #fff9;
   text-align: center;
@@ -33,6 +38,7 @@
 }
 
 .successMsg{
+  width: 50%;
   background: rgb(9, 158, 54);
   color: #fff9;
   text-align: center;
@@ -61,6 +67,25 @@
   outline: none;
   padding: 0 10px;
 }
+
+.login_page textarea{
+  width: 100%;
+  height: 100px;
+  margin: 10px 0;
+  border: 2px solid #777;
+  outline: none;
+  padding: 0 10px;
+}
+
+.login_page select{
+  padding: 10px;
+  width: 100%;
+  border-width: 2px;
+  border-color: rgb(119, 118, 118);
+  background-color: white;
+  margin-top: 3px;
+}
+
 .login_page .row{
   display: flex;
   justify-content: space-between;
@@ -87,6 +112,20 @@
   font-weight: 600;
 }
 
+.container {
+  max-width: 600px;
+  margin: 200px auto;
+  text-align: center;
+  padding: 50px 0;
+  justify-content: center;
+}
+
+h1 {
+  font-size: 60px;
+  color: #ff0000;
+  margin-bottom: 20px;
+}
+
+
 /*--------------------- User Course Lists -----------------------*/
 @import url('./course.css');
-
