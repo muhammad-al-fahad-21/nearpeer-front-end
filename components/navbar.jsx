@@ -5,6 +5,7 @@ const Navbar = ({isAuth, setIsAuth, err, type, admin}) => {
     const logout = () => {
         localStorage.removeItem('token');
         setIsAuth(false)
+        window.location.href = '/login'
     }
 
   return (

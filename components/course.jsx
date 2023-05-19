@@ -34,11 +34,13 @@ const Course = ({course, handleSubmit, handleChangeInput, id}) => {
                     value={rating} name="rating" onChange={handleChangeInput} />
                 </div>
 
-                <div>
-                    <label htmlFor="last_date">Lastest Update</label>
-                    <input type="date" id="lastest_update"
-                    value={lastest_update} name="lastest_update" onChange={handleChangeInput} />
-                </div>
+                {
+                    id && 
+                    <div>
+                        <label htmlFor="last_date">Lastest Update</label>
+                        <input type="date" id="lastest_update" value={lastest_update} name="lastest_update" onChange={handleChangeInput} />
+                    </div>
+                }
 
                 <div>
                     <label htmlFor="upload_date">Upload Date</label>

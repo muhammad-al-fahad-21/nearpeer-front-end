@@ -14,7 +14,7 @@ const initialState = {
   description: '',
   rating: 0,
   publisher: '',
-  lastest_update: '',
+  last_update: '',
   upload_date: '',
   err: '',
   success: ''
@@ -26,7 +26,7 @@ const Update = ({ params: {id} }) => {
   const [isAuth, setIsAuth] = useState(false)
   const [isAdmin, setIsAdmin] = useState(false)
 
-  const {user_id, title, description, rating, publisher, lastest_update, upload_date, err, success} = course
+  const {user_id, title, description, rating, publisher, last_update, upload_date, err, success} = course
 
   const handleChangeInput = (props) => {
     const {name, value} = props.target
@@ -44,7 +44,7 @@ const Update = ({ params: {id} }) => {
 
         if(data && !data.success) return setCourse({...course, err: data.msg, success: ''})
 
-        setCourse({...course, user_id: data.course.user_id, title: data.course.title, description: data.course.description, rating: data.course.rating, publisher: data.course.publisher, lastest_update: data.course.lastest_update, upload_date: data.course.upload_date, err: '', success: ''})
+        setCourse({...course, user_id: data.course.user_id, title: data.course.title, description: data.course.description, rating: data.course.rating, publisher: data.course.publisher, last_update: data.course.last_update, upload_date: data.course.upload_date, err: '', success: ''})
     }
       
     fetchProfile(token)
@@ -82,12 +82,13 @@ const Update = ({ params: {id} }) => {
     const token = localStorage.getItem('token');
     token && setIsAuth(true);
     if (!token) return setCourse({...course, err: 'Please sign in to continue!', success: ''});
+    if(rating < 0 || rating > 5) return setCourse({...course, err: 'Rating range is (0 - 5)', success: ''})
 
-    const field = !title ? 'title' : !publisher ? 'publisher' : !lastest_update ? 'Latest Update' : !upload_date ? 'upload_date' : ''
+    const field = !title ? 'title' : !publisher ? 'publisher' : !last_update ? 'Latest Update' : !upload_date ? 'upload_date' : ''
 
     if(field !== '') return setCourse({...course, err: `Please fill the ${field} field!`, success: ''})
 
-    const data = await courseService.updateCourse(token, id, user_id, {title, description, rating, publisher, lastest_update, upload_date})
+    const data = await courseService.updateCourse(token, id, user_id, {title, description, rating, publisher, last_update, upload_date})
 
     if(!data.success) return setCourse({...course, err: data.msg, success: ''})
 

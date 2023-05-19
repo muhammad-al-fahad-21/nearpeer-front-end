@@ -21,14 +21,14 @@ const Model = ({Id, name, token, setErr, setSuccess, type}) => {
                 data = await Course(token, id)
                 setTimeout(() => {
                     window.location.href = '/course/all'
-                }, 1000)
+                }, 100)
                 break;
             
             case 'User':
                 data = await User(token, id)
                 setTimeout(() => {
                     window.location.href = '/users'
-                }, 1000)
+                }, 100)
                 break;
 
             default:

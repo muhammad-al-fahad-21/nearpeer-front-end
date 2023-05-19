@@ -25,7 +25,7 @@ const getAllCourses = ({course, token, setErr, setSuccess}) => {
                     <th> Description </th>
                     <th> Rating </th>
                     <th> Publisher </th>
-                    <th> Lastest Update </th>
+                    <th> Last Update </th>
                     <th> Upload Date </th>
                     <th> Action </th>
                 </tr>
@@ -41,7 +41,7 @@ const getAllCourses = ({course, token, setErr, setSuccess}) => {
                                 <td>{courses.description && (courses.description).substring(0, 21) + '...'}</td>
                                 <td>{courses.rating}</td>
                                 <td>{courses.publisher}</td>
-                                <td>{courses.lastest_update}</td>
+                                <td>{courses.last_update}</td>
                                 <td>{courses.upload_date}</td>
                                 <td style={{display: 'flex', alignItems: 'center'}}>
                                     <Link href={`/course/${courses.id}`}><button style={{color: 'green', fontSize: '16px', borderWidth: '2px', padding: '10px', borderRadius: '15px', borderColor: 'darkgreen'}}> Update  </button></Link>

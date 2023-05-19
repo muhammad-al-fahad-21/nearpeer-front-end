@@ -25,7 +25,7 @@ const Create = () => {
   const [course, setCourse] = useState(initialState)
   const [isAdmin, setIsAdmin] = useState(false)
   const [isAuth, setIsAuth] = useState(false)
-  const {user_id, title, description, rating, publisher, lastest_update, upload_date, err, success} = course
+  const {user_id, title, description, rating, publisher, upload_date, err, success} = course
 
   const handleChangeInput = (props) => {
     const {name, value} = props.target
@@ -63,13 +63,13 @@ const Create = () => {
 
     const token = localStorage.getItem('token')
     if(!token) return setCourse({...course, err: 'Please sign in to continue!', success: ''})
-    if(rating < 0 && rating > 100) return setCourse({...course, err: 'Rating range is (0 - 100)', success: ''})
+    if(rating < 0 || rating > 5) return setCourse({...course, err: 'Rating range is (0 - 5)', success: ''})
 
     const field = !title ? 'Title' : !publisher ? 'Publisher' : !upload_date ? 'Upload Date' : ''
 
     if(field !== '') return setCourse({...course, err: `Please fill the ${field} field!`, success: ''})
 
-    const data = await courseService.createUserCourses(token, user_id, {title, description, rating, publisher, lastest_update, upload_date})
+    const data = await courseService.createUserCourses(token, user_id, {title, description, rating, publisher, upload_date})
 
     if(!data.success) return setCourse({...course, err: data.msg, success: ''})
 
