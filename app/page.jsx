@@ -19,9 +19,6 @@ const Page = () => {
   useEffect(() => {
 
     const token = localStorage.getItem('token')
-    token && setIsAuth(true);
-
-    if(!token) return setErr('Please sign in to continue!')
 
     const fetchProfile = async (token) => {
         const data = await userDetailsService.getUserProfile(token)
@@ -32,16 +29,20 @@ const Page = () => {
         setIsAdmin(data.user.admin)
     }
         
-    fetchProfile(token)
+    if(!token) {
 
-  }, [Date.now()])
+      return window.location.href = '/login'
 
-  if(!isAuth) return(
-    <>
-      <Navbar isAuth={isAuth} setIsAuth={setIsAuth}/>
-      <Message err={err} success={success}/>   
-    </>
-  )
+    }else {
+
+      setIsAuth(true)
+      fetchProfile(token)
+
+    }
+
+  }, [])
+
+  if(isAuth === false) return <></>
 
   return (
     <>

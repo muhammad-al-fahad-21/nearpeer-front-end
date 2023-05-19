@@ -8,6 +8,7 @@ import Navbar from '../../../components/navbar'
 import { faBookMedical, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from "next/link"
+import AccessDenied from '../../../components/access_denied'
 
 const Courses = () => {
 
@@ -37,9 +38,6 @@ const Courses = () => {
   useEffect(() => {
 
     const token = localStorage.getItem('token')
-    token && setIsAuth(true);
-
-    if(!token) return setErr('Please sign in to continue!')
 
     const fetchProfile = async (token) => {
         const data = await userDetailsService.getUserProfile(token)
@@ -49,12 +47,21 @@ const Courses = () => {
         setSuccess(data.msg)
         setIsAdmin(data.user.admin)
     }
-        
-    fetchProfile(token)
+
+    if(!token) {
+
+      return window.location.href = '/login'
+
+    }else {
+
+      setIsAuth(true)
+      fetchProfile(token)
+
+    }
 
   }, [])
 
-  if(!isAuth) return(<></>)
+  if(isAuth === false) return <></>
   
   return (
     <>
@@ -86,7 +93,7 @@ const Courses = () => {
                                 <td>{courses.description && (courses.description).substring(0, 21) + '...'}</td>
                                 <td>{courses.rating}</td>
                                 <td>{courses.publisher}</td>
-                                <td>{courses.last_update}</td>
+                                <td>{courses.lastest_update}</td>
                                 <td>{courses.upload_date}</td>
                             </tr>
                         ))

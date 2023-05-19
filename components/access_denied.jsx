@@ -1,9 +1,9 @@
 import React from 'react'
 
-const Access_denied = () => {
+const Access_denied = ({err}) => {
   return (
     <div className="container">
-        <h1 style={{fontSize: '96px'}}>404. Access Denied</h1>
+        <h1 style={{fontSize: '48px'}}>{err}</h1>
     </div>
   )
 }

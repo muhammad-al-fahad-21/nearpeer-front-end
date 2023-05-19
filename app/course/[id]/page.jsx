@@ -54,8 +54,6 @@ const Update = ({ params: {id} }) => {
   useEffect(() => {
 
     const token = localStorage.getItem('token');
-    token && setIsAuth(true);
-    if (!token) return setCourse({...course, err: 'Please sign in to continue!', success: ''});
 
     const fetchProfile = async (token) => {
         const data = await userDetailsService.getUserProfile(token)
@@ -65,7 +63,16 @@ const Update = ({ params: {id} }) => {
         setIsAdmin(data.user.admin)
     }
 
+    if(!token) {
+
+      return window.location.href = '/login'
+
+    }else {
+
+      setIsAuth(true)
       fetchProfile(token)
+
+    }
 
   }, [])
 
@@ -87,6 +94,8 @@ const Update = ({ params: {id} }) => {
     setCourse({...course, err: '', success: data.msg})
     window.location.href = '/course/all';
   }
+
+  if(isAuth === false) return <></>
 
   return (
     <>

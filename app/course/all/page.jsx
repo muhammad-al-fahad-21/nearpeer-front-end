@@ -38,9 +38,6 @@ const AllCourses = () => {
   useEffect(() => {
 
     const token = localStorage.getItem('token')
-    token && setIsAuth(true);
-
-    if(!token) return setErr('Please sign in to continue!')
 
     const fetchProfile = async (token) => {
         const data = await userDetailsService.getUserProfile(token)
@@ -50,9 +47,20 @@ const AllCourses = () => {
         data && data.user && setIsAdmin(data.user.admin)
     }
         
-    fetchProfile(token)
+    if(!token) {
+
+      return window.location.href = '/login'
+
+    }else {
+
+      setIsAuth(true)
+      fetchProfile(token)
+
+    }
 
   }, [])
+
+  if(isAuth === false) return <></>
   
   return (
     <>

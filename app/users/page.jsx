@@ -9,7 +9,6 @@ import Navbar from '../../components/navbar'
 
 const Users = () => {
 
-  const [isRoot, setIsRoot] = useState(false)
   const [isAuth, setIsAuth] = useState(false)
   const [isAdmin, setIsAdmin] = useState(false)
   const [err, setErr] = useState('')
@@ -33,27 +32,34 @@ const Users = () => {
       
     fetchCourses(token)
 
-  }, [isRoot])
+  }, [isAdmin])
 
   useEffect(() => {
 
     const token = localStorage.getItem('token')
-    token && setIsAuth(true);
-
-    if(!token) return setErr('Please sign in to continue!')
 
     const fetchProfile = async (token) => {
         const data = await userDetailsService.getUserProfile(token)
 
         if(data && !data.success) return setErr(data.msg)
 
-        data && data.user && setIsRoot(data.user.root)
         setIsAdmin(data.user.admin)
     }
         
-    fetchProfile(token)
+    if(!token) {
+
+      return window.location.href = '/login'
+
+    }else {
+
+      setIsAuth(true)
+      fetchProfile(token)
+
+    }
 
   }, [])
+
+  if(isAuth === false) return <></>
   
   return (
     <>
@@ -63,7 +69,7 @@ const Users = () => {
 
         {
           isAdmin
-          ? <User allUser={user} token={tokenUser} setErr={setErr} setSuccess={setSuccess} isRoot={isRoot}/>
+          ? <User allUser={user} token={tokenUser} setErr={setErr} setSuccess={setSuccess}/>
           : isAuth && <Access_denied/>
         }
     </>

@@ -1,9 +1,9 @@
 'use client'
 
 import React, { useState, useEffect } from "react"
-import Message from '../../components/message'
 import loginService from '../../services/loginService'
-import Navbar from '../../components/navbar'
+import Message from '../../components/message'
+import Link from "next/link"
 
 const initialState = {
   email: '',
@@ -46,8 +46,6 @@ const Login = () => {
   return (
     <>
       <title> Login </title>
-      
-      <Navbar isAuth={isAuth} setIsAuth={setIsAuth} type="login"/>
       <Message err={err} success={success}/>
         <div className="login_page">
             <form onSubmit={handleSubmit}>
@@ -66,6 +64,8 @@ const Login = () => {
                 <div className="row">
                     <button type="submit" >Login</button>
                 </div>
+
+                <p>Create New Account? <Link href="/signup" color="red"> Register Now </Link></p>
             </form>
         </div>
     </>

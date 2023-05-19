@@ -38,9 +38,6 @@ const Profile = () => {
     useEffect(() => {
 
       const token = localStorage.getItem('token')
-      token && setIsAuth(true);
-  
-      if(!token) return setUser({...user, err: 'Please sign in to continue!', success: ''})
   
       const fetchProfile = async (token) => {
           const data = await userDetailsService.getUserProfile(token)
@@ -51,7 +48,16 @@ const Profile = () => {
           setIsAdmin(data.user.admin)
       }
           
-      fetchProfile(token)
+      if(!token) {
+
+        return window.location.href = '/login'
+  
+      }else {
+  
+        setIsAuth(true)
+        fetchProfile(token)
+  
+      }
   
     }, [])
 
@@ -71,6 +77,8 @@ const Profile = () => {
         setUser({...user, err: '', success: data.msg})
         window.location.href = '/profile';
     }
+
+    if(isAuth === false) return <></>
       
     return (
         <>
@@ -139,7 +147,7 @@ const Profile = () => {
                     </div>
                 </form>
             </div>
-            : <Access_denied/>
+            : <></>
         }
         {
             isAdmin && (

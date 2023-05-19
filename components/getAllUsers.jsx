@@ -34,7 +34,7 @@ const getAllUsers = ({allUser, token, setErr, setSuccess}) => {
             <tbody>
                     {
                         allUser && allUser.map((user) => (
-                            !user.root && <tr key = {user.id}>
+                            <tr key = {user.id}>
                                 <td>{user.id}</td>
                                 <td>{user.name}</td>
                                 <td>{user.email}</td>
@@ -44,14 +44,8 @@ const getAllUsers = ({allUser, token, setErr, setSuccess}) => {
                                 <td>{user.gender}</td>
                                 <td>{user.admin ? <i class="far fa-check-circle fa-lg" style={{color: 'green'}}></i> : <i class="far fa-times-circle fa-lg" style={{color: 'red'}}></i>}</td>
                                 <td style={{display: 'flex', alignItems: 'center'}}>
-                                    {
-                                        user.root ? (
-                                            <>
-                                                <Link href={`/users/${user.id}`}><button style={{color: 'green', fontSize: '16px', borderWidth: '2px', padding: '10px', borderRadius: '15px', borderColor: 'darkgreen'}}> Update  </button></Link>
-                                                <Link href='/users'><button style={{color: 'red', fontSize: '16px', marginLeft: '20px', borderWidth: '2px', padding: '10px', borderRadius: '15px', borderColor: 'darkred'}} data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => Delete(user.id, user.name)} > Delete </button></Link>
-                                            </>
-                                        ) : <h6 style={{color: 'red'}}> Not Root Admin</h6>
-                                    }
+                                    <Link href={`/users/${user.id}`}><button style={{color: 'green', fontSize: '16px', borderWidth: '2px', padding: '10px', borderRadius: '15px', borderColor: 'darkgreen'}}> Update  </button></Link>
+                                    <Link href='/users'><button style={{color: 'red', fontSize: '16px', marginLeft: '20px', borderWidth: '2px', padding: '10px', borderRadius: '15px', borderColor: 'darkred'}} data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => Delete(user.id, user.name)} > Delete </button></Link>
                                 </td>
                             </tr>
                         ))

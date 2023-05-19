@@ -35,9 +35,6 @@ const Create = () => {
   useEffect(() => {
 
     const token = localStorage.getItem('token')
-    token && setIsAuth(true)
-
-    if(!token) return setCourse({...course, err: 'Please sign in to continue!', success: ''})
 
     const fetchProfile = async (token) => {
         const data = await userDetailsService.getUserProfile(token)
@@ -48,7 +45,16 @@ const Create = () => {
         setIsAdmin(data.user.admin)
     }
 
-    fetchProfile(token)
+    if(!token) {
+
+      return window.location.href = '/login'
+
+    }else {
+
+      setIsAuth(true)
+      fetchProfile(token)
+
+    }
 
   }, [])
 
@@ -70,6 +76,8 @@ const Create = () => {
     setCourse({...course, err: '', success: data.msg})
     window.location.href = '/course/all';
   }
+
+  if(isAuth === false) return <></>
 
   return (
     <>

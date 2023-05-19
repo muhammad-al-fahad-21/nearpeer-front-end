@@ -9,32 +9,51 @@ import { faBookMedical, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from "next/link"
 
+const initialState = {
+  name: '',
+  email: '',
+  password: '',
+  confirm_password: '',
+  city: '',
+  dob: '',
+  phone: '',
+  gender: '',
+  admin: '',
+  err: '',
+  success: ''
+}
+
 const isAdmin = ({params: {id}}) => {
 
   const [isAuth, setIsAuth] = useState(false)
-  const [isRoot, setIsRoot] = useState(false)
   const [isAdmin, setIsAdmin] = useState(false)
-  const [user, setUser] = useState([])
-  const [err, setErr] = useState(false)
-  const [success, setSuccess] = useState(false)
+  const [user, setUser] = useState(initialState)
+
+  const { admin, email, err, success } = user
 
   useEffect(() => {
 
     const token = localStorage.getItem('token')
-    token && setIsAuth(true)
-
-    if(!token) return setErr('Please sign in to continue!')
 
     const fetchProfile = async (token) => {
         const data = await userDetailsService.getUserProfile(token)
 
-        if(data && !data.success) return setErr(data.msg)
+        if(data && !data.success) return setUser({...user, err: data.msg, success: ''})
 
-        setSuccess(data.msg)
-        setIsRoot(data.user.root)
+        setUser({...user, err: data.msg, success: ''})
+        setIsAdmin(data.user.admin)
     }
 
-    fetchProfile(token)
+    if(!token) {
+
+      return window.location.href = '/login'
+
+    }else {
+
+      setIsAuth(true)
+      fetchProfile(token)
+
+    }
 
   }, [])
 
@@ -45,16 +64,14 @@ const isAdmin = ({params: {id}}) => {
     const fetchProfile = async (token, id) => {
         const data = await userDetailsService.getUserInformation(token, id)
 
-        if(data && !data.success) return setErr(data.msg)
+        if(data && !data.success) return setUser({...user, err: data.msg, success: ''})
 
-        setSuccess(data.msg)
-        setUser(data.user)
-        setIsAdmin(data.user.admin)
+        setUser({...user, admin: data.user.admin, email: data.user.email, err: '', success: ''})
     }
 
     fetchProfile(token, id)
 
-  }, [isRoot])
+  }, [isAdmin])
 
   const handleSubmit = async (props) => {
     props.preventDefault()
@@ -63,11 +80,13 @@ const isAdmin = ({params: {id}}) => {
 
     const data = await userDetailsService.isAdmin(token, id, {admin})
 
-    if(!data.success) return setErr(data.msg)
+    if(!data.success) return setUser({...user, err: data.msg, success: ''})
 
-    setSuccess(data.msg)
+    setUser({...user, err: '', success: data.msg})
     window.location.href = '/users';
   }
+
+  if(isAuth === false) return <></>
 
   return (
     <>
@@ -76,41 +95,38 @@ const isAdmin = ({params: {id}}) => {
         <Message err={err} success={success}/>
 
         {
-          isRoot
+          isAdmin
           ? 
-          <div className="login_page">
-            <form onSubmit={handleSubmit}>
-              <div>
-                  <label htmlFor="email"> Email </label>
-                  <input type="text" placeholder="Enter user email" id="email"
-                  value={user.email} name="email" disabled/>
-              </div>
+          <>
+            <div className="login_page">
+              <form onSubmit={handleSubmit}>
+                <div>
+                    <label htmlFor="email"> Email </label>
+                    <input type="text" placeholder="Enter user email" id="email"
+                    value={email} name="email" disabled/>
+                </div>
 
-              <div className="d-flex my-2">
-                  <label className="my-2" htmlFor="isAdmin"> Admin </label>
-                  <input className="mx-3 my-2" type="checkbox" id="isAdmin" style={{width: '25px', height: '25px'}}
-                  value={isAdmin} name="isAdmin" checked={isAdmin} onChange={(e) => setAdmin(e.target.checked)}/>
-              </div>
+                <div className="d-flex my-2">
+                    <label className="my-2" htmlFor="admin"> Admin </label>
+                    <input className="mx-3 my-2" type="checkbox" id="admin" style={{width: '25px', height: '25px'}}
+                    value={admin} name="admin" checked={admin} onChange={(e) => setUser({...user, admin: e.target.checked, err: '', success: ''})}/>
+                </div>
 
-              <div className="row" style={{marginTop: '10px'}}>
-                <button type="submit"> Update </button>
-              </div>
-            </form>
-          </div>
+                <div className="row" style={{marginTop: '10px'}}>
+                  <button type="submit"> Update </button>
+                </div>
+              </form>
+            </div>
+
+            <div class="fixed-button-1">
+            <Link href='/course/create'><button><FontAwesomeIcon icon={faBookMedical} size='2x' color='green'/></button></Link>
+            </div>
+
+            <div class="fixed-button">
+            <Link href='/users'><button><FontAwesomeIcon icon={faUsers} size='lg' color='red'/></button></Link>
+            </div>
+          </>
           : isAuth && <Access_denied/>
-        }
-        {
-          isAdmin && (
-              <>
-                  <div class="fixed-button-1">
-                      <Link href='/course/create'><button><FontAwesomeIcon icon={faBookMedical} size='2x' color='green'/></button></Link>
-                  </div>
-
-                  <div class="fixed-button">
-                      <Link href='/users'><button><FontAwesomeIcon icon={faUsers} size='lg' color='red'/></button></Link>
-                  </div>
-              </>
-          )
         }
     </>
   )
