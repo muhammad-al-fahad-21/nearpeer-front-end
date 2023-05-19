@@ -7,6 +7,7 @@ import Message from '../../../components/message'
 import Navbar from '../../../components/navbar'
 import Courses from '../../../components/getAllCourses'
 import Access_denied from '../../../components/access_denied'
+import { useRouter } from 'next/navigation'
 
 const AllCourses = () => {
 
@@ -16,6 +17,7 @@ const AllCourses = () => {
   const [success, setSuccess] = useState('')
   const [course, setCourse] = useState([])
   const [tokenUser, setTokenUser] = useState(null)
+  const router = useRouter();
 
   useEffect(() => {
 
@@ -49,7 +51,7 @@ const AllCourses = () => {
         
     if(!token) {
 
-      return window.location.href = '/login'
+      return router.push('/login')
 
     }else {
 

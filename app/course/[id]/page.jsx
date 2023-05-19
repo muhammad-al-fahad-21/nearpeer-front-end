@@ -7,6 +7,7 @@ import userDetailsService from '../../../services/userDetailsService'
 import Message from '../../../components/message'
 import Navbar from '../../../components/navbar'
 import Course from '../../../components/course'
+import { useRouter } from 'next/navigation'
 
 const initialState = {
   user_id: 0,
@@ -25,6 +26,7 @@ const Update = ({ params: {id} }) => {
   const [course, setCourse] = useState(initialState)
   const [isAuth, setIsAuth] = useState(false)
   const [isAdmin, setIsAdmin] = useState(false)
+  const router = useRouter();
 
   const {user_id, title, description, rating, publisher, last_update, upload_date, err, success} = course
 
@@ -65,7 +67,7 @@ const Update = ({ params: {id} }) => {
 
     if(!token) {
 
-      return window.location.href = '/login'
+      return router.push('/login')
 
     }else {
 

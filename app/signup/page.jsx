@@ -3,6 +3,7 @@
 import React, {useState, useEffect } from "react"
 import signupService from '../../services/signupService'
 import Link from "next/link"
+import { useRouter } from 'next/navigation'
 
 const initialState = {
     name: '',
@@ -20,7 +21,7 @@ const initialState = {
 const Signup = () => {
 
     const [user, setUser] = useState(initialState)
-    const [isAuth, setIsAuth] = useState(false)
+    const router = useRouter();
 
     const {name, email, password, confirm_password, city, dob, phone, gender, err, success} = user
 
@@ -28,11 +29,6 @@ const Signup = () => {
         const {name, value} = props.target
         setUser({...user, [name]:value, err: '', success: ''})
     }
-
-    useEffect(() => {
-        const token = localStorage.getItem('token')
-        token && setIsAuth(true)
-    }, [])
 
     const handleSubmit = async (props) => {
         props.preventDefault()
@@ -46,7 +42,10 @@ const Signup = () => {
         if(!data.success) return setUser({...user, err: data.msg, success: ''})
 
         setUser({...user, err: '', success: data.msg})
-        window.location.href = '/login';
+
+        localStorage.setItem('token', data.refresh_token)
+
+        router.push('/')
     }
       
     return (

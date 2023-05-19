@@ -8,6 +8,7 @@ import Access_denied from "../../../components/access_denied"
 import { faBookMedical, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from "next/link"
+import { useRouter } from 'next/navigation'
 
 const initialState = {
   name: '',
@@ -28,6 +29,7 @@ const isAdmin = ({params: {id}}) => {
   const [isAuth, setIsAuth] = useState(false)
   const [isAdmin, setIsAdmin] = useState(false)
   const [user, setUser] = useState(initialState)
+  const router = useRouter();
 
   const { admin, email, err, success } = user
 
@@ -46,7 +48,7 @@ const isAdmin = ({params: {id}}) => {
 
     if(!token) {
 
-      return window.location.href = '/login'
+      return router.push('/login')
 
     }else {
 
@@ -119,11 +121,11 @@ const isAdmin = ({params: {id}}) => {
             </div>
 
             <div class="fixed-button-1">
-            <Link href='/course/create'><button><FontAwesomeIcon icon={faBookMedical} size='2x' color='green'/></button></Link>
+              <Link href='/course/create' legacyBehavior><a style={{borderWidth: '2px', padding: '10px', paddingTop: '20px', borderColor: 'green', borderRadius: '10px'}}><FontAwesomeIcon icon={faBookMedical} size='2x' color='green'/></a></Link>
             </div>
 
             <div class="fixed-button">
-            <Link href='/users'><button><FontAwesomeIcon icon={faUsers} size='lg' color='red'/></button></Link>
+              <Link href='/users' legacyBehavior><a style={{borderWidth: '2px', padding: '12px', borderColor: 'red', borderRadius: '10px'}}><FontAwesomeIcon icon={faUsers} size='lg' color='red'/></a></Link>
             </div>
           </>
           : isAuth && <Access_denied/>

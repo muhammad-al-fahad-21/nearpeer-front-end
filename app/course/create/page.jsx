@@ -7,6 +7,7 @@ import userDetailsService from '../../../services/userDetailsService'
 import Message from '../../../components/message'
 import Navbar from '../../../components/navbar'
 import Course from '../../../components/course'
+import { useRouter } from 'next/navigation'
 
 const initialState = {
   user_id: 0,
@@ -26,6 +27,7 @@ const Create = () => {
   const [isAdmin, setIsAdmin] = useState(false)
   const [isAuth, setIsAuth] = useState(false)
   const {user_id, title, description, rating, publisher, upload_date, err, success} = course
+  const router = useRouter();
 
   const handleChangeInput = (props) => {
     const {name, value} = props.target
@@ -47,7 +49,7 @@ const Create = () => {
 
     if(!token) {
 
-      return window.location.href = '/login'
+      return router.push('/login')
 
     }else {
 

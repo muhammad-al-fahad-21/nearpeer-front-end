@@ -1,45 +1,49 @@
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useRef } from 'react'
 
-const Navbar = ({isAuth, setIsAuth, err, type, admin}) => {
+const Navbar = ({isAuth, setIsAuth, admin}) => {
+
+    const router = useRouter()
+    const navRef = useRef();
 
     const logout = () => {
         localStorage.removeItem('token');
         setIsAuth(false)
-        window.location.href = '/login'
+        router.push('/login')
     }
 
   return (
     <>
-        <nav className="navbar" style={{backgroundColor: "#e3f2fd"}}>
+        <nav className="navbar navbar-expand-lg navbar-light bg-primary">
             <div className="container-fluid">
-                <Link className="navbar-brand" href='/'>Dashboard</Link>
-
-                <div className="d-flex" style={{marginRight: '55%', marginTop: '20px'}}>
-                    <ul className="d-flex">
-                        <li className="mx-2 nav-item">
-                            <Link className="nav-link" href="/course/user"> Course </Link>
-                        </li>
-                        <li className="mx-2 nav-item">
-                            <Link className="nav-link" href="/profile"> Profile </Link>
-                        </li>
-                        {  admin &&
-                            <li className="mx-2 nav-item">
-                                <Link className="nav-link" href="/course/all"> Courses </Link>
-                            </li>
-                        }
-                    </ul>
-                </div>
-
-                <form className="d-flex" role="button">
-                <div className='mx-4'>
+            <div className='d-flex'>
+            <div style={{marginTop: "5px"}}>
+                <Link href='/' legacyBehavior>
+                    <a className="navbar-brand mx-2 text-light"> Dashboard </a>
+                </Link>
+            </div>
+                <nav ref={navRef} className='d-flex my-2 navbar-link'>
+                    <Link href='/course/user' legacyBehavior><a className='mx-4'style={{textDecoration: 'none', color: 'white'}}> Course </a></Link>
+                    {admin && <Link href='/course/all' legacyBehavior><a className='mx-4' style={{textDecoration: 'none', color: 'white'}}> Courses </a></Link>}
+                    <Link href='/profile' legacyBehavior><a className='mx-4' style={{textDecoration: 'none', color: 'white'}}> Profile </a></Link>
+                </nav>
+            </div>
+            <div className="justify-content-end" style={{marginRight: 50}}>
+                <ul className="navbar-nav p-1">
+                <li className="nav-item">
                     {
-                        !isAuth && <Link href={type === "login" ? '/signup' : '/login'}><button className='gradient-border-button'> {type === "login" ? "Signup" : "Login"} </button></Link>
-                    }
-                    {
-                        (isAuth || err === 'Invalid Authentication') && <Link href='/'><button className='gradient-button' onClick={logout}> Logout </button></Link>
-                    }
-                </div>
-                </form>
+                        !isAuth ? 
+                            <Link href='/login' legacyBehavior>
+                                <a className="text-light nav-link"><i className='fas fa-user text-light' aria-hidden="true"></i> Login </a>
+                            </Link>
+                        :   <Link href='/login' legacyBehavior>
+                                <a className="text-light nav-link" onClick={logout}><i className='fas fa-user text-light' aria-hidden="true"></i> Logout </a>
+                            </Link>
+                    } 
+                </li>
+                </ul>
+            </div>
             </div>
         </nav>
     </>

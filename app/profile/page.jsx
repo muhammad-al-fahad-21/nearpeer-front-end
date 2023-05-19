@@ -4,10 +4,10 @@ import React, {useState, useEffect } from "react"
 import Message from '../../components/message'
 import Navbar from '../../components/navbar'
 import userDetailsService from "../../services/userDetailsService"
-import Access_denied from "../../components/access_denied"
 import { faBookMedical, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from "next/link"
+import { useRouter } from 'next/navigation'
 
 const initialState = {
     name: '',
@@ -27,6 +27,7 @@ const Profile = () => {
     const [user, setUser] = useState(initialState)
     const [isAuth, setIsAuth] = useState(false)
     const [isAdmin, setIsAdmin] = useState(false)
+    const router = useRouter();
 
     const {name, email, password, confirm_password, city, dob, phone, gender, err, success} = user
 
@@ -50,7 +51,7 @@ const Profile = () => {
           
       if(!token) {
 
-        return window.location.href = '/login'
+        return router.push('/login')
   
       }else {
   
@@ -153,11 +154,11 @@ const Profile = () => {
             isAdmin && (
                 <>
                     <div class="fixed-button-1">
-                        <Link href='/course/create'><button><FontAwesomeIcon icon={faBookMedical} size='2x' color='green'/></button></Link>
+                        <Link href='/course/create' legacyBehavior><a style={{borderWidth: '2px', padding: '10px', paddingTop: '20px', borderColor: 'green', borderRadius: '10px'}}><FontAwesomeIcon icon={faBookMedical} size='2x' color='green'/></a></Link>
                     </div>
 
                     <div class="fixed-button">
-                        <Link href='/users'><button><FontAwesomeIcon icon={faUsers} size='lg' color='red'/></button></Link>
+                        <Link href='/users' legacyBehavior><a style={{borderWidth: '2px', padding: '12px', borderColor: 'red', borderRadius: '10px'}}><FontAwesomeIcon icon={faUsers} size='lg' color='red'/></a></Link>
                     </div>
                 </>
             )

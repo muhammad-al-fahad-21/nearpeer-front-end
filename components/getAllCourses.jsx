@@ -54,11 +54,11 @@ const getAllCourses = ({course, token, setErr, setSuccess}) => {
         </table>
 
         <div class="fixed-button-1">
-            <Link href='/course/create'><button><FontAwesomeIcon icon={faBookMedical} size='2x' color='green'/></button></Link>
+            <Link href='/course/create' legacyBehavior><a style={{borderWidth: '2px', padding: '10px', paddingTop: '20px', borderColor: 'green', borderRadius: '10px'}}><FontAwesomeIcon icon={faBookMedical} size='2x' color='green'/></a></Link>
         </div>
 
         <div class="fixed-button">
-            <Link href='/users'><button><FontAwesomeIcon icon={faUsers} size='lg' color='red'/></button></Link>
+            <Link href='/users' legacyBehavior><a style={{borderWidth: '2px', padding: '12px', borderColor: 'red', borderRadius: '10px'}}><FontAwesomeIcon icon={faUsers} size='lg' color='red'/></a></Link>
         </div>
 
         <Model Id={courseId} name={courseTitle} token={token} setErr={setErr} setSuccess={setSuccess} type='Course'/>

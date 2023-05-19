@@ -54,7 +54,7 @@ const getAllUsers = ({allUser, token, setErr, setSuccess}) => {
         </table>
 
         <div class="fixed-button-1">
-            <Link href='/course/create'><button><FontAwesomeIcon icon={faBookMedical} size='2x' color='green'/></button></Link>
+            <Link href='/course/create' legacyBehavior><a style={{borderWidth: '2px', padding: '10px', paddingTop: '20px', borderColor: 'green', borderRadius: '10px'}}><FontAwesomeIcon icon={faBookMedical} size='2x' color='green'/></a></Link>
         </div>
 
         <Model Id={userId} name={userName} token={token} setErr={setErr} setSuccess={setSuccess} type='User'/>

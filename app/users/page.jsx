@@ -6,6 +6,7 @@ import Access_denied from '../../components/access_denied'
 import userDetailsService from '../../services/userDetailsService'
 import Message from '../../components/message'
 import Navbar from '../../components/navbar'
+import { useRouter } from 'next/navigation'
 
 const Users = () => {
 
@@ -15,6 +16,7 @@ const Users = () => {
   const [success, setSuccess] = useState('')
   const [user, setUser] = useState([])
   const [tokenUser, setTokenUser] = useState(null)
+  const router = useRouter();
 
   useEffect(() => {
 
@@ -48,7 +50,7 @@ const Users = () => {
         
     if(!token) {
 
-      return window.location.href = '/login'
+      return router.push('/login')
 
     }else {
 

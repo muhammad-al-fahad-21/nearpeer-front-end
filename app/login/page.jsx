@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react"
 import loginService from '../../services/loginService'
 import Message from '../../components/message'
 import Link from "next/link"
+import { useRouter } from 'next/navigation'
 
 const initialState = {
   email: '',
@@ -15,7 +16,7 @@ const initialState = {
 const Login = () => {
 
   const [user, setUser] = useState(initialState)
-  const [isAuth, setIsAuth] = useState(false)
+  const router = useRouter();
 
   const {email, password, err, success} = user
 
@@ -23,11 +24,6 @@ const Login = () => {
     const {name, value} = props.target
     setUser({...user, [name]:value, err: '', success: ''})
   }
-
-  useEffect(() => {
-    const token = localStorage.getItem('token')
-    token && setIsAuth(true)
-  }, [])
 
   const handleSubmit = async (props) => {
     props.preventDefault()
@@ -40,7 +36,7 @@ const Login = () => {
 
     localStorage.setItem('token', data.refresh_token)
  
-    window.location.href = '/';
+    router.push('/')
   }
 
   return (
