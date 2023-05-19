@@ -14,7 +14,7 @@ const Navbar = ({isAuth, setIsAuth, err, type, admin}) => {
             <div className="container-fluid">
                 <Link className="navbar-brand" href='/'>Dashboard</Link>
 
-                <div className="d-flex" style={{marginRight: '500px', marginTop: '20px'}}>
+                <div className="d-flex" style={{marginRight: '55%', marginTop: '20px'}}>
                     <ul className="d-flex">
                         <li className="mx-2 nav-item">
                             <Link className="nav-link" href="/course/user"> Course </Link>
@@ -30,10 +30,7 @@ const Navbar = ({isAuth, setIsAuth, err, type, admin}) => {
                     </ul>
                 </div>
 
-                <form className="d-flex" role="search">
-                <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-                <button className="btn btn-outline-success" type="submit">Search</button>
-
+                <form className="d-flex" role="button">
                 <div className='mx-4'>
                     {
                         !isAuth && <Link href={type === "login" ? '/signup' : '/login'}><button className='gradient-border-button'> {type === "login" ? "Signup" : "Login"} </button></Link>

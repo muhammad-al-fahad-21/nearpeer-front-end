@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 const Course = ({course, handleSubmit, handleChangeInput, id}) => {
 
-    const {user_id, title, description, rating, lastest_update, upload_date} = course
+    const {user_id, title, description, rating, last_update, upload_date} = course
 
   return (
     <>
@@ -37,8 +37,8 @@ const Course = ({course, handleSubmit, handleChangeInput, id}) => {
                 {
                     id && 
                     <div>
-                        <label htmlFor="last_date">Lastest Update</label>
-                        <input type="date" id="lastest_update" value={lastest_update} name="lastest_update" onChange={handleChangeInput} />
+                        <label htmlFor="last_update">Lastest Update</label>
+                        <input type="date" id="last_update" value={last_update} name="last_update" onChange={handleChangeInput} />
                     </div>
                 }
 

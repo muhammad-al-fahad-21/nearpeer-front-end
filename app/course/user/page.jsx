@@ -93,7 +93,7 @@ const Courses = () => {
                                 <td>{courses.description && (courses.description).substring(0, 21) + '...'}</td>
                                 <td>{courses.rating}</td>
                                 <td>{courses.publisher}</td>
-                                <td>{courses.lastest_update}</td>
+                                <td>{courses.last_update}</td>
                                 <td>{courses.upload_date}</td>
                             </tr>
                         ))
