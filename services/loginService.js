@@ -3,7 +3,7 @@ class LoginService {
 
     async login(post) {
         
-        const res = await fetch(`${process.env.BASE_URL}/api/login`, {
+        const res = await fetch(`${process.env.BASE_URL}/login`, {
             method: "POST",
             headers: {
               'Content-Type': 'application/json'

@@ -3,7 +3,7 @@ class CoursesService {
 
     async getUserCourse(token) {
 
-        const res = await fetch(`${process.env.BASE_URL}/api/course/user`, {
+        const res = await fetch(`${process.env.BASE_URL}/course/user`, {
             method: "GET",
             next: { revalidate: 60 },
             headers: {
@@ -17,7 +17,7 @@ class CoursesService {
 
     async createUserCourses(token, id, post) {
 
-        const res = await fetch(`${process.env.BASE_URL}/api/course`, {
+        const res = await fetch(`${process.env.BASE_URL}/course`, {
             method: "POST",
             headers: {
               'Content-Type': 'application/json',
@@ -32,7 +32,7 @@ class CoursesService {
 
     async getAllCourses(token) {
         
-        const res = await fetch(`${process.env.BASE_URL}/api/course`, {
+        const res = await fetch(`${process.env.BASE_URL}/course`, {
             method: "GET",
             next: { revalidate: 60 },
             headers: {
@@ -45,7 +45,7 @@ class CoursesService {
     }
 
     async deleteCourse(token, id) {
-        const res = await fetch(`${process.env.BASE_URL}/api/course`, {
+        const res = await fetch(`${process.env.BASE_URL}/course`, {
             method: "DELETE",
             headers: {
               'Content-Type': 'application/json',
@@ -58,7 +58,7 @@ class CoursesService {
     }
 
     async updateCourse(token, id, user_id, put) {
-        const res = await fetch(`${process.env.BASE_URL}/api/course/${id}`, {
+        const res = await fetch(`${process.env.BASE_URL}/course/${id}`, {
             method: "PUT",
             headers: {
               'Content-Type': 'application/json',
@@ -72,7 +72,7 @@ class CoursesService {
     }
 
     async getCourse(token, id) {
-        const res = await fetch(`${process.env.BASE_URL}/api/course/${id}`, {
+        const res = await fetch(`${process.env.BASE_URL}/course/${id}`, {
             method: "GET",
             next: { revalidate: 60 },
             headers: {

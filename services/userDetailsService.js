@@ -2,7 +2,7 @@ class UserDetailsService {
 
     async getAllUsers(token) {
 
-        const res = await fetch(`${process.env.BASE_URL}/api/user`, {
+        const res = await fetch(`${process.env.BASE_URL}/user`, {
             method: "GET",
             next: { revalidate: 60 },
             headers: {
@@ -16,7 +16,7 @@ class UserDetailsService {
 
     async getUserProfile(token) {
 
-        const res = await fetch(`${process.env.BASE_URL}/api/user/profile`, {
+        const res = await fetch(`${process.env.BASE_URL}/user/profile`, {
             method: "GET",
             next: { revalidate: 60 },
             headers: {
@@ -30,7 +30,7 @@ class UserDetailsService {
 
     async getUserInformation(token, id) {
 
-        const res = await fetch(`${process.env.BASE_URL}/api/user/info`, {
+        const res = await fetch(`${process.env.BASE_URL}/user/info`, {
             method: "GET",
             next: { revalidate: 60 },
             headers: {
@@ -45,7 +45,7 @@ class UserDetailsService {
 
     async isAdmin(token, id, put) {
 
-        const res = await fetch(`${process.env.BASE_URL}/api/user/isAdmin/${id}`, {
+        const res = await fetch(`${process.env.BASE_URL}/user/isAdmin/${id}`, {
             method: "PUT",
             headers: {
               'Content-Type': 'application/json',
@@ -59,7 +59,7 @@ class UserDetailsService {
 
     async updateUser(token, put) {
 
-        const res = await fetch(`${process.env.BASE_URL}/api/user/profile`, {
+        const res = await fetch(`${process.env.BASE_URL}/user/profile`, {
             method: "PUT",
             headers: {
               'Content-Type': 'application/json',
@@ -72,7 +72,7 @@ class UserDetailsService {
     }
 
     async deleteUser(token, id) {
-        const res = await fetch(`${process.env.BASE_URL}/api/user`, {
+        const res = await fetch(`${process.env.BASE_URL}/user`, {
             method: "DELETE",
             headers: {
               'Content-Type': 'application/json',
