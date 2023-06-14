@@ -1,74 +1,62 @@
 'use client'
 
-import {useEffect, useState} from 'react'
-import courseService from '../../../services/courseService'
-import userDetailsService from '../../../services/userDetailsService'
+import {useEffect, useState, Suspense} from 'react'
+import { getUserCourse } from '../../../services/courseService'
+import { getUserProfile} from '../../../services/userDetailsService'
 import Message from '../../../components/message'
-import Navbar from '../../../components/navbar'
-import { faBookMedical, faUsers } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Link from "next/link"
 import { useRouter } from 'next/navigation'
 
 const Courses = () => {
 
-  const [isAuth, setIsAuth] = useState(false)
-  const [isAdmin, setIsAdmin] = useState(false)
+  const [auth, setAuth] = useState(false)
+  const [user, setUser] = useState([])
+  const [authToken, setAuthToken] = useState('')
+
   const [course, setCourse] = useState([])
   const [err, setErr] = useState('')
-  const [success, setSuccess] = useState('')
   const router = useRouter();
 
   useEffect(() => {
 
-    const token = localStorage.getItem('token')
-
     const fetchCourses = async (token) => {
-        const data = await courseService.getUserCourse(token)
+        const data = await getUserCourse(token)
 
         if(data && !data.success) return setErr(data.msg)
-    
-        setSuccess(data.msg)
+
         setCourse(data.course)
     }
       
-    fetchCourses(token)
+    authToken && fetchCourses(authToken)
 
-  }, [isAuth])
+  }, [authToken])
 
   useEffect(() => {
 
     const token = localStorage.getItem('token')
 
-    const fetchProfile = async (token) => {
-        const data = await userDetailsService.getUserProfile(token)
-
-        if(data && !data.success) return setErr(data.msg)
-
-        setSuccess(data.msg)
-        setIsAdmin(data.user.admin)
+    if(token) {
+        setAuth(true) 
+        setAuthToken(token)
     }
 
-    if(!token) {
+    const fetchData = async (token) => {
+      const res = await getUserProfile(token)
 
-      return router.push('/login')
+      if(!res.success) return router.push('/login');
 
-    }else {
-
-      setIsAuth(true)
-      fetchProfile(token)
-
+      setUser(res.user)
     }
+
+    fetchData(token)
 
   }, [])
 
-  if(isAuth === false) return <></>
+  if(!auth && !user) return <></>
   
   return (
-    <>
+    <Suspense fallback={<div> Loading... </div>}>
         <title> Course List</title>
-        <Navbar isAuth={isAuth} setIsAuth={setIsAuth} admin={isAdmin}/>
-        <Message err={err} success={success}/> 
+        <Message err={err} success={''}/> 
 
         <table className="table__body">
             <thead>
@@ -86,7 +74,7 @@ const Courses = () => {
 
             <tbody>
                     {
-                        isAuth && course && course.map((courses) => (
+                        course && course.map((courses) => (
                             <tr key = {courses.id}>
                                 <td>{courses.id}</td>
                                 <td>{courses.user_id}</td>
@@ -101,21 +89,7 @@ const Courses = () => {
                     }
             </tbody>
         </table>
-
-        {
-        isAdmin && (
-          <>
-            <div class="fixed-button-1">
-              <Link href='/course/create' legacyBehavior><a style={{borderWidth: '2px', padding: '10px', paddingTop: '20px', borderColor: 'green', borderRadius: '10px'}}><FontAwesomeIcon icon={faBookMedical} size='2x' color='green'/></a></Link>
-            </div>
-
-            <div class="fixed-button">
-              <Link href='/users' legacyBehavior><a style={{borderWidth: '2px', padding: '12px', borderColor: 'red', borderRadius: '10px'}}><FontAwesomeIcon icon={faUsers} size='lg' color='red'/></a></Link>
-            </div>
-          </>
-        )
-      }
-    </>
+    </Suspense>
   )
 }
 

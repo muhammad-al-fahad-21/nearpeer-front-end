@@ -3,7 +3,7 @@ class LoginService {
 
     async login(post) {
         
-        const res = await fetch(`${process.env.BASE_URL}/login`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_MAIN_BACKEND}/login`, {
             method: "POST",
             headers: {
               'Content-Type': 'application/json'

@@ -1,80 +1,71 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 import User from '../../components/getAllUsers'
 import Access_denied from '../../components/access_denied'
-import userDetailsService from '../../services/userDetailsService'
+import { getAllUsers, getUserProfile } from '../../services/userDetailsService'
 import Message from '../../components/message'
-import Navbar from '../../components/navbar'
 import { useRouter } from 'next/navigation'
 
 const Users = () => {
 
-  const [isAuth, setIsAuth] = useState(false)
-  const [isAdmin, setIsAdmin] = useState(false)
+  const [auth, setAuth] = useState(false)
+  const [sUser, setSUser] = useState([])
+  const [authToken, setAuthToken] = useState('')
+
   const [err, setErr] = useState('')
   const [success, setSuccess] = useState('')
   const [user, setUser] = useState([])
-  const [tokenUser, setTokenUser] = useState(null)
   const router = useRouter();
 
   useEffect(() => {
 
-    const token = localStorage.getItem('token')
-
-    setTokenUser(token)
-
-    const fetchCourses = async (token) => {
-        const data = await userDetailsService.getAllUsers(token)
+    const fetchUsers = async (token) => {
+        const data = await getAllUsers(token)
 
         if(data && !data.success) return setErr(data.msg)
     
         setUser(data.user)
     }
       
-    fetchCourses(token)
+    authToken && fetchUsers(authToken)
 
-  }, [isAdmin])
+  }, [authToken])
 
   useEffect(() => {
 
     const token = localStorage.getItem('token')
 
-    const fetchProfile = async (token) => {
-        const data = await userDetailsService.getUserProfile(token)
-
-        if(data && !data.success) return setErr(data.msg)
-
-        setIsAdmin(data.user.admin)
+    if(token) {
+        setAuth(true) 
+        setAuthToken(token)
     }
-        
-    if(!token) {
 
-      return router.push('/login')
+    const fetchData = async (token) => {
+      const res = await getUserProfile(token)
 
-    }else {
+      if(!res.success) return router.push('/login');
 
-      setIsAuth(true)
-      fetchProfile(token)
-
+      setSUser(res.user)
     }
+
+    fetchData(token)
 
   }, [])
 
-  if(isAuth === false) return <></>
+  if(!auth && !sUser) return <></>
   
   return (
-    <>
+    <Suspense fallback={<div> Loading... </div>}>
         <title> All Users </title>
-        <Navbar isAuth={isAuth} setIsAuth={setIsAuth} admin={isAdmin}/>
         <Message err={err} success={success}/>
 
         {
-          isAdmin
-          ? <User allUser={user} token={tokenUser} setErr={setErr} setSuccess={setSuccess}/>
-          : isAuth && <Access_denied/>
+          sUser && sUser.admin
+          ? <User allUser={user} token={authToken} setErr={setErr} setSuccess={setSuccess}/>
+          : auth && <Access_denied/>
         }
-    </>
+    </Suspense>
   )
 }
 

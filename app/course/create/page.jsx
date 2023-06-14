@@ -1,11 +1,10 @@
 'use client'
 
-import React, {useEffect, useState } from 'react'
+import {useEffect, useState, Suspense } from 'react'
 import AcessDenied from '../../../components/access_denied'
-import courseService from '../../../services/courseService'
-import userDetailsService from '../../../services/userDetailsService'
+import { createUserCourses } from '../../../services/courseService'
+import { getUserProfile } from '../../../services/userDetailsService'
 import Message from '../../../components/message'
-import Navbar from '../../../components/navbar'
 import Course from '../../../components/course'
 import { useRouter } from 'next/navigation'
 
@@ -24,10 +23,13 @@ const initialState = {
 const Create = () => {
 
   const [course, setCourse] = useState(initialState)
-  const [isAdmin, setIsAdmin] = useState(false)
-  const [isAuth, setIsAuth] = useState(false)
-  const {user_id, title, description, rating, publisher, upload_date, err, success} = course
+  const [auth, setAuth] = useState(false)
+  const [user, setUser] = useState([])
+  const [authToken, setAuthToken] = useState('')
+  
   const router = useRouter();
+
+  const {user_id, title, description, rating, publisher, upload_date, err, success} = course
 
   const handleChangeInput = (props) => {
     const {name, value} = props.target
@@ -38,60 +40,53 @@ const Create = () => {
 
     const token = localStorage.getItem('token')
 
-    const fetchProfile = async (token) => {
-        const data = await userDetailsService.getUserProfile(token)
-
-        if(data && !data.success) return setCourse({...course, err: data.msg, success: ''})
-
-        setCourse({...course, publisher: data.user.name, err: '', success: ''})
-        setIsAdmin(data.user.admin)
+    if(token) {
+        setAuth(true) 
+        setAuthToken(token)
     }
 
-    if(!token) {
+    const fetchData = async (token) => {
+      const res = await getUserProfile(token)
 
-      return router.push('/login')
+      if(!res.success) return router.push('/login');
 
-    }else {
-
-      setIsAuth(true)
-      fetchProfile(token)
-
+      setUser(res.user)
+      setCourse({...course, publisher: res.user.name, err: '', success: ''})
     }
+
+    fetchData(token)
 
   }, [])
 
   const handleSubmit = async (props) => {
     props.preventDefault()
 
-    const token = localStorage.getItem('token')
-    if(!token) return setCourse({...course, err: 'Please sign in to continue!', success: ''})
     if(rating < 0 || rating > 5) return setCourse({...course, err: 'Rating range is (0 - 5)', success: ''})
 
     const field = !title ? 'Title' : !publisher ? 'Publisher' : !upload_date ? 'Upload Date' : ''
 
     if(field !== '') return setCourse({...course, err: `Please fill the ${field} field!`, success: ''})
 
-    const data = await courseService.createUserCourses(token, user_id, {title, description, rating, publisher, upload_date})
+    const data = await createUserCourses(authToken, user_id, {title, description, rating, publisher, upload_date})
 
     if(!data.success) return setCourse({...course, err: data.msg, success: ''})
 
     setCourse({...course, err: '', success: data.msg})
-    window.location.href = '/course/all';
+    router.push('/course/all')
   }
 
-  if(isAuth === false) return <></>
+  if(!auth && !user) return <></>
 
   return (
-    <>
-    <title> Create Course </title>
-    <Navbar isAuth={isAuth} setIsAuth={setIsAuth} admin={isAdmin}/>
-    <Message err={err} success={success}/> 
-    {
-      isAdmin
-      ? <Course course={course} handleSubmit={handleSubmit} handleChangeInput={handleChangeInput}/>
-      : <AcessDenied/>
-    }
-    </>
+    <Suspense fallback={<div> Loading... </div>}>
+      <title> Create Course </title>
+      <Message err={err} success={success}/> 
+      {
+        user && user.admin
+        ? <Course course={course} handleSubmit={handleSubmit} handleChangeInput={handleChangeInput}/>
+        : auth && <AcessDenied/>
+      }
+    </Suspense>
   )
 }
 

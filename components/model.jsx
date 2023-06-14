@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import courseService from '../services/courseService'
 import userDetailsService from '../services/userDetailsService'
 

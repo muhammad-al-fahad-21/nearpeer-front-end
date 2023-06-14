@@ -1,70 +1,36 @@
 'use client'
 
-import Navbar from '../components/navbar'
-import Message from '../components/message'
-import userDetailsService from '../services/userDetailsService'
-import {useEffect, useState} from 'react'
-import Link from 'next/link'
+import {useEffect, useState, Suspense} from 'react'
 import Image from 'next/image'
-import { faBookMedical, faUsers } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRouter } from 'next/navigation'
+import { getUserProfile } from '../services/userDetailsService'
 
 const Page = () => {
-
-  const [isAuth, setIsAuth] = useState(false)
-  const [isAdmin, setIsAdmin] = useState(false)
-  const [err, setErr] = useState('')
-  const [success, setSuccess] = useState('')
+  const [user, setUser] = useState(null)
+  const [auth, isAuth] = useState(false)
   const router = useRouter();
 
   useEffect(() => {
-
     const token = localStorage.getItem('token')
 
-    const fetchProfile = async (token) => {
-        const data = await userDetailsService.getUserProfile(token)
+    if(token) isAuth(true)
 
-        if(data && !data.success) return setErr(data.msg)
+    const fetchData = async (token) => {
+      const res = await getUserProfile(token)
 
-        setSuccess(data.msg)
-        setIsAdmin(data.user.admin)
-    }
-        
-    if(!token) {
+      if(!res.success) return router.push('/login');
 
-      return router.push('/login')
-
-    }else {
-
-      setIsAuth(true)
-      fetchProfile(token)
-
+      setUser(res.user)
     }
 
+    fetchData(token)
   }, [])
 
-  if(isAuth === false) return <></>
+  if(!auth && !user) return <></>
 
   return (
-    <>
+    <Suspense fallback={<div> Loading... </div>}>
       <title> Dashboard </title>
-      <Navbar isAuth={isAuth} setIsAuth={setIsAuth} admin={isAdmin}/>
-      <Message err={err} success={success}/>  
-
-      {
-        isAdmin && (
-          <>
-            <div class="fixed-button-1">
-              <Link href='/course/create' legacyBehavior><a style={{borderWidth: '2px', padding: '10px', paddingTop: '20px', borderColor: 'green', borderRadius: '10px'}}><FontAwesomeIcon icon={faBookMedical} size='2x' color='green'/></a></Link>
-            </div>
-
-            <div class="fixed-button">
-              <Link href='/users' legacyBehavior><a style={{borderWidth: '2px', padding: '12px', borderColor: 'red', borderRadius: '10px'}}><FontAwesomeIcon icon={faUsers} size='lg' color='red'/></a></Link>
-            </div>
-          </>
-        )
-      }
 
       <main className="flex min-h-screen flex-col items-center justify-between p-24">
             <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px]">
@@ -148,7 +114,7 @@ const Page = () => {
               </a>
             </div>
       </main>
-    </>
+      </Suspense>
   )
 }
 

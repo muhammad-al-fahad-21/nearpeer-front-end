@@ -2,9 +2,9 @@ class UserDetailsService {
 
     async getAllUsers(token) {
 
-        const res = await fetch(`${process.env.BASE_URL}/user`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_MAIN_BACKEND}/user`, {
             method: "GET",
-            next: { revalidate: 60 },
+            next: { revalidate: 10 },
             headers: {
               'Content-Type': 'application/json',
               'Authorization': token
@@ -16,9 +16,9 @@ class UserDetailsService {
 
     async getUserProfile(token) {
 
-        const res = await fetch(`${process.env.BASE_URL}/user/profile`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_MAIN_BACKEND}/user/profile`, {
             method: "GET",
-            next: { revalidate: 60 },
+            next: { revalidate: 10 },
             headers: {
               'Content-Type': 'application/json',
               'Authorization': token
@@ -30,9 +30,9 @@ class UserDetailsService {
 
     async getUserInformation(token, id) {
 
-        const res = await fetch(`${process.env.BASE_URL}/user/info`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_MAIN_BACKEND}/user/info`, {
             method: "GET",
-            next: { revalidate: 60 },
+            next: { revalidate: 10 },
             headers: {
               'Content-Type': 'application/json',
               'Authorization': token,
@@ -45,7 +45,7 @@ class UserDetailsService {
 
     async isAdmin(token, id, put) {
 
-        const res = await fetch(`${process.env.BASE_URL}/user/isAdmin/${id}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_MAIN_BACKEND}/user/isAdmin/${id}`, {
             method: "PUT",
             headers: {
               'Content-Type': 'application/json',
@@ -59,7 +59,7 @@ class UserDetailsService {
 
     async updateUser(token, put) {
 
-        const res = await fetch(`${process.env.BASE_URL}/user/profile`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_MAIN_BACKEND}/user/profile`, {
             method: "PUT",
             headers: {
               'Content-Type': 'application/json',
@@ -72,7 +72,7 @@ class UserDetailsService {
     }
 
     async deleteUser(token, id) {
-        const res = await fetch(`${process.env.BASE_URL}/user`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_MAIN_BACKEND}/user`, {
             method: "DELETE",
             headers: {
               'Content-Type': 'application/json',

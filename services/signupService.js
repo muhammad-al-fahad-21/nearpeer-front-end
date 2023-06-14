@@ -2,7 +2,7 @@ class SignupService {
 
     async signup(post) {
 
-        const res = await fetch(`${process.env.BASE_URL}/signup`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_MAIN_BACKEND}/signup`, {
             method: "POST",
             headers: {
               'Content-Type': 'application/json'

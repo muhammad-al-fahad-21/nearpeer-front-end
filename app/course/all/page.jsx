@@ -1,81 +1,74 @@
 'use client'
 
-import {useEffect, useState} from 'react'
-import courseService from '../../../services/courseService'
-import userDetailsService from '../../../services/userDetailsService'
+import {useEffect, useState, Suspense} from 'react'
+import { getAllCourses } from '../../../services/courseService'
+import { getUserProfile } from "../../../services/userDetailsService"
 import Message from '../../../components/message'
-import Navbar from '../../../components/navbar'
 import Courses from '../../../components/getAllCourses'
 import Access_denied from '../../../components/access_denied'
 import { useRouter } from 'next/navigation'
 
 const AllCourses = () => {
 
-  const [isAdmin, setIsAdmin] = useState(false)
-  const [isAuth, setIsAuth] = useState(false)
-  const [err, setErr] = useState('')
+  const [auth, setAuth] = useState(false)
+  const [user, setUser] = useState([])
+  const [authToken, setAuthToken] = useState('')
+
   const [success, setSuccess] = useState('')
+  const [err, setErr] = useState('')
   const [course, setCourse] = useState([])
-  const [tokenUser, setTokenUser] = useState(null)
   const router = useRouter();
 
   useEffect(() => {
 
-    const token = localStorage.getItem('token')
-
-    setTokenUser(token)
-
     const fetchCourses = async (token) => {
-        const data = await courseService.getAllCourses(token)
+        const data = await getAllCourses(token)
 
-        if(data && !data.success) return setErr(data.msg)
+        console.log(authToken)
+
+        if(!data.success) return setErr(data.msg)
     
         setCourse(data.course)
     }
       
-    fetchCourses(token)
+    authToken && fetchCourses(authToken)
 
-  }, [isAdmin])
+  }, [authToken])
 
   useEffect(() => {
 
     const token = localStorage.getItem('token')
 
-    const fetchProfile = async (token) => {
-        const data = await userDetailsService.getUserProfile(token)
-
-        if(data && !data.success) return setErr(data.msg)
-
-        data && data.user && setIsAdmin(data.user.admin)
+    if(token) {
+        setAuth(true) 
+        setAuthToken(token)
     }
-        
-    if(!token) {
 
-      return router.push('/login')
+    const fetchData = async (token) => {
+      const res = await getUserProfile(token)
 
-    }else {
+      if(!res.success) return router.push('/login');
 
-      setIsAuth(true)
-      fetchProfile(token)
-
+      setUser(res.user)
     }
+
+    fetchData(token)
 
   }, [])
 
-  if(isAuth === false) return <></>
+  if(!auth && !user) return <></>
   
   return (
-    <>
+    <Suspense fallback={<div> Loading... </div>}>
         <title> All Courses </title>
-        <Navbar isAuth={isAuth} setIsAuth={setIsAuth} admin={isAdmin}/>
         <Message err={err} success={success}/> 
 
         {
-          isAdmin
-          ? <Courses course={course} token={tokenUser} setErr={setErr} setSuccess={setSuccess}/>
-          : isAuth && <Access_denied/>
+          user && user.admin
+          ? <Courses course={course} token={authToken} setErr={setErr} setSuccess={setSuccess}/>
+          : auth && <Access_denied/>
         }
-    </>
+    </Suspense>
   )
 }
 

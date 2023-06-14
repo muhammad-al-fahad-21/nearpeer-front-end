@@ -1,7 +1,8 @@
 'use client'
 
-import React, {useState, useEffect } from "react"
-import signupService from '../../services/signupService'
+import {useState, useEffect, Suspense } from "react"
+import { signup } from '../../services/signupService'
+import Message from '../../components/message'
 import Link from "next/link"
 import { useRouter } from 'next/navigation'
 
@@ -30,6 +31,12 @@ const Signup = () => {
         setUser({...user, [name]:value, err: '', success: ''})
     }
 
+    useEffect(() => {
+        const token = localStorage.getItem('token')
+    
+        if(token) return router.push('/')
+    }, [])
+
     const handleSubmit = async (props) => {
         props.preventDefault()
 
@@ -37,7 +44,7 @@ const Signup = () => {
 
         if(!email || !password || !city || !dob || !phone || gender == "select") return setUser({...user, err: 'Please fill all the fields!', success: ''})
 
-        const data = await signupService.signup({name, email, password, city, dob, phone, gender})
+        const data = await signup({name, email, password, city, dob, phone, gender})
 
         if(!data.success) return setUser({...user, err: data.msg, success: ''})
 
@@ -45,12 +52,13 @@ const Signup = () => {
 
         localStorage.setItem('token', data.refresh_token)
 
-        router.push('/')
+        return router.push('/')
     }
       
     return (
-        <>
+        <Suspense fallback={<div> Loading... </div>}>
         <title> Signup </title>
+        <Message err={err} success={success}/>
         <div className="login_page">
             <form onSubmit={handleSubmit}>
                 <div>
@@ -111,7 +119,7 @@ const Signup = () => {
                 <p>Already an account? <Link href="/login"> Login Now </Link></p>
             </form>
         </div>
-        </>
+        </Suspense>
     )
 }
 

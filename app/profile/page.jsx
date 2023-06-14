@@ -1,12 +1,8 @@
 'use client'
 
-import React, {useState, useEffect } from "react"
+import {useState, useEffect, Suspense } from "react"
 import Message from '../../components/message'
-import Navbar from '../../components/navbar'
-import userDetailsService from "../../services/userDetailsService"
-import { faBookMedical, faUsers } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Link from "next/link"
+import { updateUser, getUserProfile } from "../../services/userDetailsService"
 import { useRouter } from 'next/navigation'
 
 const initialState = {
@@ -24,9 +20,10 @@ const initialState = {
 
 const Profile = () => {
 
+    const [auth, isAuth] = useState(false)
+    const [authToken, setAuthToken] = useState('')
+
     const [user, setUser] = useState(initialState)
-    const [isAuth, setIsAuth] = useState(false)
-    const [isAdmin, setIsAdmin] = useState(false)
     const router = useRouter();
 
     const {name, email, password, confirm_password, city, dob, phone, gender, err, success} = user
@@ -37,58 +34,51 @@ const Profile = () => {
     }
 
     useEffect(() => {
+  
+        const token = localStorage.getItem('token')
 
-      const token = localStorage.getItem('token')
-  
-      const fetchProfile = async (token) => {
-          const data = await userDetailsService.getUserProfile(token)
-  
-          if(data && !data.success) return setUser({...user, err: data.msg, success: ''})
-  
-          data && data.user && setUser({...user, name: data.user.name, email: data.user.email, city: data.user.city, dob: data.user.dob, phone: data.user.phone, gender: data.user.gender, err: '', success: ''})
-          setIsAdmin(data.user.admin)
-      }
-          
-      if(!token) {
-
-        return router.push('/login')
-  
-      }else {
-  
-        setIsAuth(true)
-        fetchProfile(token)
-  
-      }
+        if(token) {
+            isAuth(true) 
+            setAuthToken(token)
+        }
+    
+        const fetchData = async (token) => {
+          const res = await getUserProfile(token)
+    
+          if(!res.success) return router.push('/login');
+    
+          setUser({...user, name: res.user.name, email: res.user.email, city: res.user.city, dob: res.user.dob, phone: res.user.phone, gender: res.user.gender, err: '', success: ''})
+        }
+    
+        fetchData(token)
   
     }, [])
 
     const handleSubmit = async (props) => {
         props.preventDefault()
 
-        const token = localStorage.getItem('token')
-
         if(password !== confirm_password) return setUser({...user, err: 'Password do not match!', success: ''})
 
         if(!email || !password || !city || !dob || !phone || gender === "select") return setUser({...user, err: 'Please fill all the fields!', success: ''})
 
-        const data = await userDetailsService.updateUser(token, {name, email, password, city, dob, phone, gender})
+        const data = await updateUser(authToken, {name, email, password, city, dob, phone, gender})
 
         if(!data.success) return setUser({...user, err: data.msg, success: ''})
 
         setUser({...user, err: '', success: data.msg})
-        window.location.href = '/profile';
+
+        return router.push('/profile')
     }
 
-    if(isAuth === false) return <></>
+    if(!auth && !user) return <></>
       
     return (
-        <>
+        <Suspense fallback={<div> Loading... </div>}>
         <title> Profile </title>
-        <Navbar isAuth={isAuth} setIsAuth={setIsAuth} admin={isAdmin}/>
         <Message err={err} success={success}/>
 
         {
-            isAuth ?
+            auth && user ?
                 <div className="login_page">
 
                 <form onSubmit={handleSubmit}>
@@ -150,20 +140,7 @@ const Profile = () => {
             </div>
             : <></>
         }
-        {
-            isAdmin && (
-                <>
-                    <div class="fixed-button-1">
-                        <Link href='/course/create' legacyBehavior><a style={{borderWidth: '2px', padding: '10px', paddingTop: '20px', borderColor: 'green', borderRadius: '10px'}}><FontAwesomeIcon icon={faBookMedical} size='2x' color='green'/></a></Link>
-                    </div>
-
-                    <div class="fixed-button">
-                        <Link href='/users' legacyBehavior><a style={{borderWidth: '2px', padding: '12px', borderColor: 'red', borderRadius: '10px'}}><FontAwesomeIcon icon={faUsers} size='lg' color='red'/></a></Link>
-                    </div>
-                </>
-            )
-        }
-        </>
+        </Suspense>
     )
 }
 

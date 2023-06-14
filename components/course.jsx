@@ -1,7 +1,3 @@
-import { faBookMedical, faUsers } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Link from 'next/link';
-
 const Course = ({course, handleSubmit, handleChangeInput, id}) => {
 
     const {user_id, title, description, rating, last_update, upload_date} = course
@@ -52,14 +48,6 @@ const Course = ({course, handleSubmit, handleChangeInput, id}) => {
                     <button type="submit">{id ? 'Update' : 'Create'}</button>
                 </div>
             </form>
-        </div>
-
-        <div class="fixed-button-1">
-            <Link href='/course/create' legacyBehavior><a style={{borderWidth: '2px', padding: '10px', paddingTop: '20px', borderColor: 'green', borderRadius: '10px'}}><FontAwesomeIcon icon={faBookMedical} size='2x' color='green'/></a></Link>
-        </div>
-
-        <div class="fixed-button">
-            <Link href='/users' legacyBehavior><a style={{borderWidth: '2px', padding: '12px', borderColor: 'red', borderRadius: '10px'}}><FontAwesomeIcon icon={faUsers} size='lg' color='red'/></a></Link>
         </div>
     </>
   )

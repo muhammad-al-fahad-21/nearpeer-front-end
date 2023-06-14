@@ -3,9 +3,9 @@ class CoursesService {
 
     async getUserCourse(token) {
 
-        const res = await fetch(`${process.env.BASE_URL}/course/user`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_MAIN_BACKEND}/course/user`, {
             method: "GET",
-            next: { revalidate: 60 },
+            next: { revalidate: 10 },
             headers: {
               'Content-Type': 'application/json',
               'Authorization': token
@@ -17,7 +17,7 @@ class CoursesService {
 
     async createUserCourses(token, id, post) {
 
-        const res = await fetch(`${process.env.BASE_URL}/course`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_MAIN_BACKEND}/course`, {
             method: "POST",
             headers: {
               'Content-Type': 'application/json',
@@ -32,9 +32,9 @@ class CoursesService {
 
     async getAllCourses(token) {
         
-        const res = await fetch(`${process.env.BASE_URL}/course`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_MAIN_BACKEND}/course`, {
             method: "GET",
-            next: { revalidate: 60 },
+            next: { revalidate: 10 },
             headers: {
               'Content-Type': 'application/json',
               'Authorization': token
@@ -45,7 +45,7 @@ class CoursesService {
     }
 
     async deleteCourse(token, id) {
-        const res = await fetch(`${process.env.BASE_URL}/course`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_MAIN_BACKEND}/course`, {
             method: "DELETE",
             headers: {
               'Content-Type': 'application/json',
@@ -58,7 +58,7 @@ class CoursesService {
     }
 
     async updateCourse(token, id, user_id, put) {
-        const res = await fetch(`${process.env.BASE_URL}/course/${id}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_MAIN_BACKEND}/course/${id}`, {
             method: "PUT",
             headers: {
               'Content-Type': 'application/json',
@@ -72,9 +72,9 @@ class CoursesService {
     }
 
     async getCourse(token, id) {
-        const res = await fetch(`${process.env.BASE_URL}/course/${id}`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_MAIN_BACKEND}/course/${id}`, {
             method: "GET",
-            next: { revalidate: 60 },
+            next: { revalidate: 10 },
             headers: {
               'Content-Type': 'application/json',
               'Authorization': token

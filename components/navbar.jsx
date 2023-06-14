@@ -2,21 +2,33 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useRef } from 'react'
 
-const Navbar = ({isAuth, setIsAuth, admin}) => {
+const Navbar = ({token, admin}) => {
 
     const router = useRouter()
     const navRef = useRef();
 
-    const logout = () => {
+    const logout = async () => {
         localStorage.removeItem('token');
-        setIsAuth(false)
-        router.push('/login')
+        localStorage.removeItem('user');
+
+        await fetch(`${process.env.NEXT_PUBLIC_MAIN_BACKEND}/logout`, {
+            method: 'POST',
+            headers: {
+                'Authorization': token
+            }
+        }).then(res => {
+            const data = res.json();
+
+            if(data.msg === 'Logout Successfully') return router.push('/login')
+        }).catch(err => console.error(err.message))
     }
+
+    if(!token) return <></>
 
   return (
     <>
         <nav className="navbar navbar-expand-lg navbar-light bg-primary">
-            <div className="container-fluid">
+            <div className="container-fluid" >
             <div className='d-flex'>
             <div style={{marginTop: "5px"}}>
                 <Link href='/' legacyBehavior>
@@ -33,7 +45,7 @@ const Navbar = ({isAuth, setIsAuth, admin}) => {
                 <ul className="navbar-nav p-1">
                 <li className="nav-item">
                     {
-                        !isAuth ? 
+                        !token ? 
                             <Link href='/login' legacyBehavior>
                                 <a className="text-light nav-link"><i className='fas fa-user text-light' aria-hidden="true"></i> Login </a>
                             </Link>
