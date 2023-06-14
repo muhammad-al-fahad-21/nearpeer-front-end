@@ -3,6 +3,7 @@
 import {useEffect, useState, Suspense } from 'react'
 import AcessDenied from '../../../components/access_denied'
 import { getCourse, updateCourse } from '../../../services/courseService'
+import { getUserProfile } from '../../../services/userDetailsService'
 import Message from '../../../components/message'
 import Course from '../../../components/course'
 import { useRouter } from 'next/navigation'
