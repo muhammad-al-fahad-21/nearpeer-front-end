@@ -62,7 +62,7 @@ const Users = () => {
 
         {
           sUser && sUser.admin
-          ? <User allUser={user} token={authToken} setErr={setErr} setSuccess={setSuccess}/>
+          ? <User allUser={user} token={authToken} setErr={setErr} setSuccess={setSuccess} auth={sUser}/>
           : auth && <Access_denied/>
         }
     </Suspense>
