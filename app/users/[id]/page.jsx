@@ -41,7 +41,7 @@ const updateRole = ({params: {id}}) => {
   if(!token && !user.token) return <></>
 
   return (
-    <Suspense fallback={<div> Loading... </div>}>
+    <>
         <title> Role </title>
 
         {
@@ -69,7 +69,7 @@ const updateRole = ({params: {id}}) => {
             </div>
           </>
         }
-    </Suspense>
+    </>
   )
 }
 

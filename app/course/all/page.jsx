@@ -19,19 +19,19 @@ const AllCourses = () => {
   }, [token])
 
   useEffect(() => {
-    if(user.token) dispatch(Courses(token))
-  }, [user.token])
+    if(token) dispatch(Courses(token))
+  }, [token, course.courses])
 
   if(!token && !user.token) return router.push('/login')
   
   return (
-    <Suspense fallback={<div> Loading... </div>}>
+    <>
         <title> All Courses </title>
 
         {
           user && user.info && user.info.admin && <Course courses={course.courses}/>
         }
-    </Suspense>
+    </>
   )
 }
 

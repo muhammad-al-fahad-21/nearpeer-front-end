@@ -25,7 +25,7 @@ const Courses = () => {
   if(!token && !user.token) return router.push('/login')
   
   return (
-    <Suspense fallback={<div> Loading... </div>}>
+    <>
         <title> Course List</title>
         <table className="table__body">
             <thead>
@@ -58,7 +58,7 @@ const Courses = () => {
                     }
             </tbody>
         </table>
-    </Suspense>
+    </>
   )
 }
 

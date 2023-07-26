@@ -188,7 +188,7 @@ thead th:hover {
   .users {
     position: fixed;
     cursor: pointer;
-    bottom: 45px;
+    bottom: 120px;
     right: 20px;
   }
   
@@ -204,7 +204,7 @@ thead th:hover {
 
   .create-course {
     position: fixed;
-    bottom: 120px;
+    bottom: 180px;
     right: 23px;
   }
   

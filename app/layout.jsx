@@ -23,9 +23,7 @@ const RootLayout = ({ children }) => {
         <Notify/>
         <Navbar/>
         <AdminAccess/>
-        <Suspense fallback={<div className='loader'></div>}>
-            {children}
-        </Suspense>
+        {children}
       </Provider>
       </body>
     </html>

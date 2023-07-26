@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 import { useSelector, useDispatch } from 'react-redux'
 import { Success, Error } from '../../../store/model'
 import { Auth } from '../../../store/user'
+import { Courses } from '../../../store/course'
 
 const initialState = {
   user_id: 0,
@@ -33,6 +34,10 @@ const Create = () => {
     if(token) dispatch(Auth(token))
   }, [token])
 
+  useEffect(() => {
+    if(token) dispatch(Courses(token))
+  }, [token, course.courses])
+
   const handleChangeInput = (props) => {
     const {name, value} = props.target
     setCourse({...course, [name]: value})
@@ -42,13 +47,10 @@ const Create = () => {
     props.preventDefault()
 
     if(rating < 1 || rating > 5) return dispatch(Error('Rating range is (1 - 5)'))
-
     const field = !title ? 'Title' : !upload_date ? 'Upload Date' : ''
-
     if(field !== '') return dispatch(Error(`Please fill the ${field} field!`))
 
     const data = await createUserCourses(user.token, user_id, {title, description, rating, publisher: user.info.name, upload_date})
-
     if(!data.success) return dispatch(Error(data.msg)) 
 
     dispatch(Success(data.msg)) 
