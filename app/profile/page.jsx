@@ -1,8 +1,10 @@
 'use client'
 
 import {useState, useEffect, Suspense } from "react"
-import Message from '../../components/message'
-import { updateUser, getUserProfile } from "../../services/userDetailsService"
+import { updateUser } from "../../services/userDetailsService"
+import { Auth } from "../../store/user"
+import { useDispatch, useSelector } from 'react-redux'
+import { Success, Error } from '../../store/model'
 import { useRouter } from 'next/navigation'
 
 const initialState = {
@@ -13,72 +15,63 @@ const initialState = {
     city: '',
     dob: '',
     phone: '',
-    gender: '',
-    err: '',
-    success: ''
+    gender: ''
 }
 
 const Profile = () => {
 
-    const [auth, isAuth] = useState(false)
-    const [authToken, setAuthToken] = useState('')
+    const [user1, setUser] = useState(initialState)
+    const dispatch = useDispatch()
+    const router = useRouter()
+    const token = localStorage.getItem("token")
+    const state = useSelector(state => state);
+    const { user } = state
 
-    const [user, setUser] = useState(initialState)
-    const router = useRouter();
-
-    const {name, email, password, confirm_password, city, dob, phone, gender, err, success} = user
+    const {name, email, password, confirm_password, city, dob, phone, gender } = user1
 
     const handleChangeInput = (props) => {
         const {name, value} = props.target
-        setUser({...user, [name]:value, err: '', success: ''})
+        setUser({...user1, [name]:value })
     }
 
     useEffect(() => {
-  
-        const token = localStorage.getItem('token')
+        if(token) dispatch(Auth(token))
+    }, [token])
 
-        if(token) {
-            isAuth(true) 
-            setAuthToken(token)
-        }
-    
-        const fetchData = async (token) => {
-          const res = await getUserProfile(token)
-    
-          if(!res.success) return router.push('/login');
-    
-          setUser({...user, name: res.user.name, email: res.user.email, city: res.user.city, dob: res.user.dob, phone: res.user.phone, gender: res.user.gender, err: '', success: ''})
-        }
-    
-        fetchData(token)
-  
-    }, [])
+    useEffect(() => {
+        if(user.token && user.info) setUser({
+            ...user1, 
+            name: user.info.name,
+            email: user.info.email,
+            city: user.info.city,
+            dob: user.info.dob,
+            phone: user.info.phone,
+            gender: user.info.gender
+        })
+
+    }, [user])
 
     const handleSubmit = async (props) => {
         props.preventDefault()
 
-        if(password !== confirm_password) return setUser({...user, err: 'Password do not match!', success: ''})
+        if(password !== confirm_password) return dispatch(Error('Password do not match!'))
 
-        if(!email || !password || !city || !dob || !phone || gender === "select") return setUser({...user, err: 'Please fill all the fields!', success: ''})
+        if(!email || !password || !city || !dob || !phone || gender === "select") return dispatch(Error('Please fill all the fields!'))
 
-        const data = await updateUser(authToken, {name, email, password, city, dob, phone, gender})
+        const data = await updateUser(user.token, {name, email, password, city, dob, phone, gender})
 
-        if(!data.success) return setUser({...user, err: data.msg, success: ''})
+        if(!data.success) return dispatch(Error(data.msg))
 
-        setUser({...user, err: '', success: data.msg})
-
-        return router.push('/profile')
+        dispatch(Success(data.msg))
     }
 
-    if(!auth && !user) return <></>
+    if(!token && !user.token) return router.push('/login')
       
     return (
         <Suspense fallback={<div> Loading... </div>}>
         <title> Profile </title>
-        <Message err={err} success={success}/>
-
         {
-            auth && user ?
+            user && user.token ?
                 <div className="login_page">
 
                 <form onSubmit={handleSubmit}>

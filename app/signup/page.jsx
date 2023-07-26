@@ -1,10 +1,12 @@
 'use client'
 
-import {useState, useEffect, Suspense } from "react"
+import {useState, Suspense } from "react"
 import { signup } from '../../services/signupService'
-import Message from '../../components/message'
 import Link from "next/link"
 import { useRouter } from 'next/navigation'
+import { Auth } from '../../store/user'
+import { Success, Error } from '../../store/model'
+import { useDispatch, useSelector } from 'react-redux'
 
 const initialState = {
     name: '',
@@ -14,51 +16,47 @@ const initialState = {
     city: '',
     dob: '',
     phone: '',
-    gender: '',
-    err: '',
-    success: ''
+    gender: ''
 }
 
 const Signup = () => {
 
-    const [user, setUser] = useState(initialState)
+    const [user1, setUser] = useState(initialState)
     const router = useRouter();
+    const dispatch = useDispatch()
+    const token = localStorage.getItem("token");
+    const state = useSelector(state => state)
+    const { user } = state;
 
-    const {name, email, password, confirm_password, city, dob, phone, gender, err, success} = user
+    const {name, email, password, confirm_password, city, dob, phone, gender} = user1
 
     const handleChangeInput = (props) => {
         const {name, value} = props.target
-        setUser({...user, [name]:value, err: '', success: ''})
+        setUser({...user1, [name]:value })
     }
-
-    useEffect(() => {
-        const token = localStorage.getItem('token')
-    
-        if(token) return router.push('/')
-    }, [])
 
     const handleSubmit = async (props) => {
         props.preventDefault()
 
-        if(password !== confirm_password) return setUser({...user, err: 'Password do not match!', success: ''})
+        if(password !== confirm_password) return dispatch(Error('Password do not match!'))
 
-        if(!email || !password || !city || !dob || !phone || gender == "select") return setUser({...user, err: 'Please fill all the fields!', success: ''})
+        if(!email || !password || !city || !dob || !phone || gender == "select") return dispatch(Error('Please fill all the fields!'))
 
         const data = await signup({name, email, password, city, dob, phone, gender})
 
-        if(!data.success) return setUser({...user, err: data.msg, success: ''})
-
-        setUser({...user, err: '', success: data.msg})
-
-        localStorage.setItem('token', data.refresh_token)
-
-        return router.push('/')
+        if(!data.success) return dispatch(Error(data.msg))
+    
+        dispatch(Auth(data.refresh_token))
+        dispatch(Success(data.msg))
+        localStorage.setItem("token", data.refresh_token);
+        router.push('/')
     }
+
+    if(token && user.token) return router.push('/')
       
     return (
         <Suspense fallback={<div> Loading... </div>}>
         <title> Signup </title>
-        <Message err={err} success={success}/>
         <div className="login_page">
             <form onSubmit={handleSubmit}>
                 <div>

@@ -1,16 +1,36 @@
-import {useState} from 'react'
 import Link from 'next/link'
-import Model from './model'
+import { useEffect } from 'react'
+import { Delete, Success, Error } from '../store/model'
+import { useDispatch, useSelector } from 'react-redux'
+import courseService from '../services/courseService'
+import Swal from 'sweetalert2'
 
-const getAllCourses = ({course, token, setErr, setSuccess}) => {
+const getAllCourses = ({ courses }) => {
+    const dispatch = useDispatch()
+    const state = useSelector(state => state)
+    const { user, model } = state
 
-    const [courseId, setCourseId] = useState(0)
-    const [courseTitle, setCourseTitle] = useState('')
-
-    const Delete = (id, title) => {
-        setCourseId(id)
-        setCourseTitle(title)
-      }
+    useEffect(() => {
+        if(model.delete.length !== 0) {
+            Swal.fire({
+                title: 'Delete',
+                text: `You want to delete ${model.delete.title} ?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33', 
+                confirmButtonText: 'Yes'
+            }).then((result) => {
+                if(result.isConfirmed) {
+                    courseService.deleteCourse(user.token, model.delete.id).then(res => {
+                        if(!res.success) return dispatch(Error(res.msg))
+                        dispatch(Success(res.msg))
+                    })
+                }
+                dispatch(Delete([]))
+            })
+        }
+    }, [model.delete])
 
   return (
     <>
@@ -31,27 +51,25 @@ const getAllCourses = ({course, token, setErr, setSuccess}) => {
 
             <tbody>
                     {
-                        course && course.map((courses) => (
-                            <tr key = {courses.id}>
-                                <td>{courses.id}</td>
-                                <td>{courses.user_id}</td>
-                                <td>{courses.title && (courses.title).substring(0, 21)}</td>
-                                <td>{courses.description && (courses.description).substring(0, 21) + '...'}</td>
-                                <td>{courses.rating}</td>
-                                <td>{courses.publisher}</td>
-                                <td>{courses.last_update}</td>
-                                <td>{courses.upload_date}</td>
+                        courses && courses.map((course) => (
+                            <tr key = {course.id}>
+                                <td>{course.id}</td>
+                                <td>{course.user_id}</td>
+                                <td>{course.title && (course.title).substring(0, 21)}</td>
+                                <td>{course.description && (course.description).substring(0, 21) + '...'}</td>
+                                <td>{course.rating}</td>
+                                <td>{course.publisher}</td>
+                                <td>{course.last_update}</td>
+                                <td>{course.upload_date}</td>
                                 <td style={{display: 'flex', alignItems: 'center'}}>
-                                    <Link href={`/course/${courses.id}`}><button style={{color: 'green', fontSize: '16px', borderWidth: '2px', padding: '10px', borderRadius: '15px', borderColor: 'darkgreen'}}> Update  </button></Link>
-                                    <Link href='/course/all'><button style={{color: 'red', fontSize: '16px', marginLeft: '20px', borderWidth: '2px', padding: '10px', borderRadius: '15px', borderColor: 'darkred'}} data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => Delete(courses.id, courses.title)} > Delete </button></Link>
+                                    <Link href={`/course/${course.id}`}><button style={{color: 'green', fontSize: '16px', borderWidth: '2px', padding: '10px', borderRadius: '15px', borderColor: 'darkgreen'}}> Update  </button></Link>
+                                    <Link href='/course/all'><button style={{color: 'red', fontSize: '16px', marginLeft: '20px', borderWidth: '2px', padding: '10px', borderRadius: '15px', borderColor: 'darkred'}} onClick={() => dispatch(Delete(course))} > Delete </button></Link>
                                 </td>
                             </tr>
                         ))
                     }
             </tbody>
         </table>
-
-        <Model Id={courseId} name={courseTitle} token={token} setErr={setErr} setSuccess={setSuccess} type='Course'/>
     </>
 
   )

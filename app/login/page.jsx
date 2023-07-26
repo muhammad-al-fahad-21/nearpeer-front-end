@@ -1,55 +1,51 @@
 'use client'
 
-import { useState, useEffect, Suspense } from "react"
+import { useState, Suspense, useEffect } from "react"
 import { login } from '../../services/loginService'
-import Message from '../../components/message'
 import Link from "next/link"
 import { useRouter } from 'next/navigation'
-
+import { Auth } from '../../store/user'
+import { useDispatch, useSelector } from 'react-redux'
+import { Error, Success } from '../../store/model'
 
 const initialState = {
   email: '',
-  password: '',
-  err: '',
-  success: ''
+  password: ''
 }
 
 const Login = () => {
 
-  const [user, setUser] = useState(initialState)
-  const router = useRouter();
+  const [user1, setUser] = useState(initialState)
+  const dispatch = useDispatch()
+  const token = localStorage.getItem("token");
+  const state = useSelector(state => state)
+  const { user } = state;
 
-  const {email, password, err, success} = user
+  const router = useRouter();
+  const {email, password } = user1
 
   const handleChangeInput = (props) => {
     const {name, value} = props.target
-    setUser({...user, [name]:value, err: '', success: ''})
+    setUser({ ...user1, [name]:value })
   }
-
-  useEffect(() => {
-    const token = localStorage.getItem('token')
-
-    if(token) return router.push('/')
-  }, [])
 
   const handleSubmit = async (props) => {
     props.preventDefault()
 
-    const data = await login({email, password})
+    const data = await login({ email, password })
+    if(!data.success) return dispatch(Error(data.msg))
 
-    if(!data.success) return setUser({...user, err: data.msg, success: ''})
-
-    setUser({...user, err: '', success: data.msg})
-
-    localStorage.setItem('token', data.refresh_token)
-
+    dispatch(Auth(data.refresh_token))
+    dispatch(Success(data.msg))
+    localStorage.setItem("token", data.refresh_token);
     router.push('/')
   }
 
+  if(token && user.token) return router.push('/')
+
   return (
-    <Suspense fallback={<div> Loading... </div>}>
+    <>
       <title> Login </title>
-      <Message err={err} success={success}/>
         <div className="login_page">
             <form onSubmit={handleSubmit}>
                 <div>
@@ -71,7 +67,7 @@ const Login = () => {
                 <p>Create New Account? <Link href="/signup" color="red"> Register Now </Link></p>
             </form>
         </div>
-    </Suspense>
+    </>
   )
 }
 

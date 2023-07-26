@@ -185,14 +185,14 @@ thead th:hover {
     transform: translateY(1px);
   }
 
-  .fixed-button {
+  .users {
     position: fixed;
     cursor: pointer;
-    bottom: 20px;
+    bottom: 45px;
     right: 20px;
   }
   
-  .fixed-button button{
+  .users button{
     background-color: white;
     min-width: 50px;
     max-width: 80px;
@@ -202,13 +202,13 @@ thead th:hover {
     border-radius: 15px;
   }
 
-  .fixed-button-1 {
+  .create-course {
     position: fixed;
-    bottom: 80px;
-    right: 20px;
+    bottom: 120px;
+    right: 23px;
   }
   
-  .fixed-button-1 button{
+  .create-course button{
     background-color: white;
     cursor: pointer;
     min-width: 50px;

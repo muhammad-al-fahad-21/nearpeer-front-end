@@ -1,63 +1,32 @@
 'use client'
 
-import {useEffect, useState, Suspense} from 'react'
-import { getUserCourse } from '../../../services/courseService'
-import { getUserProfile} from '../../../services/userDetailsService'
-import Message from '../../../components/message'
+import { Suspense, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { Auth } from '../../../store/user'
+import { User } from '../../../store/course'
 import { useRouter } from 'next/navigation'
 
 const Courses = () => {
 
-  const [auth, setAuth] = useState(false)
-  const [user, setUser] = useState([])
-  const [authToken, setAuthToken] = useState('')
-
-  const [course, setCourse] = useState([])
-  const [err, setErr] = useState('')
+  const state = useSelector(state => state)
+  const dispatch = useDispatch()
   const router = useRouter();
+  const token = localStorage.getItem("token")
+  const { course, user } = state
 
   useEffect(() => {
-
-    const fetchCourses = async (token) => {
-        const data = await getUserCourse(token)
-
-        if(data && !data.success) return setErr(data.msg)
-
-        setCourse(data.course)
-    }
-      
-    authToken && fetchCourses(authToken)
-
-  }, [authToken])
+    if(token) dispatch(Auth(token))
+  }, [token])
 
   useEffect(() => {
+    if(user.token) dispatch(User(token))
+  }, [user.token])
 
-    const token = localStorage.getItem('token')
-
-    if(token) {
-        setAuth(true) 
-        setAuthToken(token)
-    }
-
-    const fetchData = async (token) => {
-      const res = await getUserProfile(token)
-
-      if(!res.success) return router.push('/login');
-
-      setUser(res.user)
-    }
-
-    fetchData(token)
-
-  }, [])
-
-  if(!auth && !user) return <></>
+  if(!token && !user.token) return router.push('/login')
   
   return (
     <Suspense fallback={<div> Loading... </div>}>
         <title> Course List</title>
-        <Message err={err} success={''}/> 
-
         <table className="table__body">
             <thead>
                 <tr>
@@ -74,7 +43,7 @@ const Courses = () => {
 
             <tbody>
                     {
-                        course && course.map((courses) => (
+                        course && course.user.map((courses) => (
                             <tr key = {courses.id}>
                                 <td>{courses.id}</td>
                                 <td>{courses.user_id}</td>

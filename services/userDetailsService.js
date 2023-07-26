@@ -83,6 +83,18 @@ class UserDetailsService {
 
         return res.json()
     }
+
+    async logoutUser(token) {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_MAIN_BACKEND}/logout`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': token
+            }
+        })
+
+        return res.json()
+    }
 }
 
 module.exports = new UserDetailsService()
