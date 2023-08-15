@@ -16,9 +16,9 @@ const Page = () => {
   
   useEffect(() => {
     if(token) dispatch(Auth(token))
-  }, [token])
+  }, [])
 
-  if(!token || !user.token) return router.push('/login')
+  if(!token && !user.token) return router.push('/login')
 
   return (
     <>

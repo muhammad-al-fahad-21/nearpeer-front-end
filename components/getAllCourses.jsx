@@ -55,8 +55,8 @@ const getAllCourses = ({ courses }) => {
                             <tr key = {course.id}>
                                 <td>{course.id}</td>
                                 <td>{course.user_id}</td>
-                                <td>{course.title && (course.title).substring(0, 21)}</td>
-                                <td>{course.description && (course.description).substring(0, 21) + '...'}</td>
+                                <td>{course.title && (course.title).substring(0, 20)}</td>
+                                <td title={course.description.length > 20 && course.description}>{course.description && (course.description).substring(0, 20) + (course.description.length > 20 ? '...' : '')}</td>
                                 <td>{course.rating}</td>
                                 <td>{course.publisher}</td>
                                 <td>{course.last_update}</td>

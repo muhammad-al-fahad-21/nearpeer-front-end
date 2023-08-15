@@ -14,11 +14,11 @@ const adminAccess = () => {
   return (
     <>
         { user.info.admin && (<>
-          <div class="create-course">
+          <div className="create-course">
               <Link href='/course/create' legacyBehavior><a style={{borderWidth: '2px', padding: '10px', paddingTop: '20px', borderColor: 'green', borderRadius: '10px'}}><FontAwesomeIcon icon={faBookMedical} size='2x' color='green'/></a></Link>
           </div>
 
-          <div class="users">
+          <div className="users">
               <Link href='/users' legacyBehavior><a style={{borderWidth: '2px', padding: '12px', borderColor: 'red', borderRadius: '10px'}}><FontAwesomeIcon icon={faUsers} size='lg' color='red'/></a></Link>
           </div>
         </>)}

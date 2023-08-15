@@ -1,14 +1,14 @@
 import Link from 'next/link'
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import { logoutUser } from '../services/userDetailsService'
-import { Auth, deleteData } from '../store/user'
+import { deleteData } from '../store/user'
 import { Error, Success } from '../store/model'
 import { useSelector, useDispatch } from 'react-redux'
 
 const Navbar = () => {
+    const token = localStorage.getItem("token");
 
     const navRef = useRef();
-    const token = localStorage.getItem("token")
     const state = useSelector(state => state);
     const dispatch = useDispatch()
     const { user } = state
@@ -25,8 +25,8 @@ const Navbar = () => {
     if(!token) return <></>
 
   return (
-    <>
-        <nav className="navbar navbar-expand-lg navbar-light bg-primary">
+    <div style={{position: "sticky", width: "100%", top: 0}}>
+        <nav className="navbar navbar-expand-lg navbar-light bg-primary sticky">
             <div className="container-fluid" >
             <div className='d-flex'>
             <div style={{marginTop: "5px"}}>
@@ -51,7 +51,7 @@ const Navbar = () => {
             </div>
             </div>
         </nav>
-    </>
+    </div>
   )
 }
 

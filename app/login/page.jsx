@@ -8,12 +8,11 @@ import { Auth } from '../../store/user'
 import { useDispatch, useSelector } from 'react-redux'
 import { Error, Success } from '../../store/model'
 
-const initialState = {
-  email: '',
-  password: ''
-}
-
 const Login = () => {
+  const initialState = {
+    email: '',
+    password: ''
+  }
 
   const [user1, setUser] = useState(initialState)
   const dispatch = useDispatch()
