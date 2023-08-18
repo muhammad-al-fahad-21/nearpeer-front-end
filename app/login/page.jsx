@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { login } from '../../services/loginService'
 import Link from "next/link"
 import { useRouter } from 'next/navigation'
@@ -22,6 +22,10 @@ const Login = () => {
   const router = useRouter();
   const {email, password } = user1
 
+  useEffect(() => {
+    if(user.token) return router.push('/')
+  }, [])
+
   const handleChangeInput = (props) => {
     const {name, value} = props.target
     setUser({ ...user1, [name]:value })
@@ -37,8 +41,6 @@ const Login = () => {
     dispatch(Success(data.msg))
     router.push('/')
   }
-
-  if(user.token) return router.push('/')
 
   return (
     <div>

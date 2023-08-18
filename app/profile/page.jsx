@@ -42,6 +42,9 @@ const Profile = () => {
             phone: user.info.phone,
             gender: user.info.gender
         })
+        else {
+            return router.push("/login")
+        }
 
     }, [user])
 
@@ -56,8 +59,6 @@ const Profile = () => {
 
         dispatch(Success(data.msg))
     }
-
-    if(!user.token) return router.push('/login')
       
     return (
         <div>

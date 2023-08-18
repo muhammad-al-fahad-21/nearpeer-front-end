@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { signup } from '../../services/signupService'
 import Link from "next/link"
 import { useRouter } from 'next/navigation'
@@ -29,6 +29,10 @@ const Signup = () => {
 
     const {name, email, password, confirm_password, city, dob, phone, gender} = user1
 
+    useEffect(() => {
+        if(user.token) return router.push('/')
+    }, [])
+
     const handleChangeInput = (props) => {
         const {name, value} = props.target
         setUser({...user1, [name]:value })
@@ -50,8 +54,6 @@ const Signup = () => {
         localStorage.setItem("token", data.refresh_token);
         router.push('/')
     }
-
-    if(user.token) return router.push('/')
       
     return (
         <div>

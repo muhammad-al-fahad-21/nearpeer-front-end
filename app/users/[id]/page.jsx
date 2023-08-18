@@ -21,7 +21,8 @@ const updateRole = ({params: {id}}) => {
   }, [token])
 
   useEffect(() => {
-    dispatch(Role(token, id))
+    if(user.token) dispatch(Role(token, id))
+    else return router.push('/login')
   }, [user.token])
 
   useEffect(() => {

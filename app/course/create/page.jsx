@@ -6,7 +6,6 @@ import Course from '../../../components/course'
 import { useRouter } from 'next/navigation'
 import { useSelector, useDispatch } from 'react-redux'
 import { Success, Error } from '../../../store/model'
-import { Auth } from '../../../store/user'
 import { Courses } from '../../../store/course'
 
 const initialState = {
@@ -30,6 +29,7 @@ const Create = () => {
 
   useEffect(() => {
     if(user.token) dispatch(Courses(user.token))
+    else return router.push('/login')
   }, [course.courses])
 
   const handleChangeInput = (props) => {
@@ -50,8 +50,6 @@ const Create = () => {
     dispatch(Success(data.msg)) 
     router.push('/course/all')
   }
-
-  if(!user.token) return router.push('/login')
 
   return (
     <div>

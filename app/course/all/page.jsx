@@ -14,9 +14,8 @@ const AllCourses = () => {
 
   useEffect(() => {
     if(user.token) dispatch(Courses(user.token))
+    else return router.push('/login')
   }, [course.courses])
-
-  if(!user.token) return router.push('/login')
   
   return (
     <div>

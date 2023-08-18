@@ -3,7 +3,7 @@
 import {useEffect, useState } from 'react'
 import { updateCourse } from '../../../services/courseService'
 import CourseId from '../../../components/course'
-import { useRouter } from 'next/navigation'
+import { useRouter } from 'next/router'
 import { useSelector, useDispatch } from 'react-redux'
 import { Success, Error } from '../../../store/model'
 import { Course } from '../../../store/course'
@@ -32,6 +32,7 @@ const Update = ({ params: {id} }) => {
     if(user.token) {
       dispatch(Course(user.token, id))
     }
+    else return router.push('/login')
   }, [course.course])
 
   const handleChangeInput = (props) => {
@@ -69,8 +70,6 @@ const Update = ({ params: {id} }) => {
     dispatch(Success(data.msg))
     router.push('/course/all')
   }
-
-  if(!user.token) return router.push('/login')
 
   return (
     <div>

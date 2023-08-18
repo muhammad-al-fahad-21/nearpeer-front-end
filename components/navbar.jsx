@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { useEffect, useRef, useState } from 'react'
+import { useRef } from 'react'
 import { logoutUser } from '../services/userDetailsService'
 import { Auth, deleteData } from '../store/user'
 import { Error, Success } from '../store/model'

@@ -3,6 +3,7 @@
 import { useSelector } from 'react-redux'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
+import { useEffect } from 'react'
 
 const Page = () => {
 
@@ -10,7 +11,9 @@ const Page = () => {
   const state = useSelector(state => state);
   const { user } = state
 
-  if(!user.token) return router.push("/login")
+  useEffect(() => {
+    if(!user.token) return router.push('/login')
+  }, [])
 
   return (
     <div>
