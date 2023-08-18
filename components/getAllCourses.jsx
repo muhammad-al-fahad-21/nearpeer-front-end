@@ -33,7 +33,7 @@ const getAllCourses = ({ courses }) => {
     }, [model.delete])
 
   return (
-    <>
+    <div>
         <table className="table__body">
             <thead>
                 <tr>
@@ -70,7 +70,7 @@ const getAllCourses = ({ courses }) => {
                     }
             </tbody>
         </table>
-    </>
+    </div>
 
   )
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, Suspense} from "react"
+import { useState, useEffect } from "react"
 import { isAdmin } from '../../../services/userDetailsService'
 import { useRouter } from 'next/navigation'
 import { useSelector, useDispatch } from 'react-redux'
@@ -38,16 +38,18 @@ const updateRole = ({params: {id}}) => {
     router.push('/users')
   }
 
-  if(!token && !user.token) return <></>
+  if(!user.token) return (
+    <div></div>
+  )
 
   return (
-    <>
+    <div>
         <title> Role </title>
 
         {
           
           user && user.info && user.info.admin &&
-          <>
+          <div>
             <div className="login_page">
               <form onSubmit={handleSubmit}>
                 <div>
@@ -67,9 +69,9 @@ const updateRole = ({params: {id}}) => {
                 </div>
               </form>
             </div>
-          </>
+          </div>
         }
-    </>
+    </div>
   )
 }
 

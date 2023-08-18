@@ -14,7 +14,6 @@ const initialState = {
   title: '',
   description: '',
   rating: 0,
-  publisher: '',
   lastest_update: '',
   upload_date: ''
 }
@@ -24,19 +23,14 @@ const Create = () => {
   const [course, setCourse] = useState(initialState)
   const state = useSelector(state => state)
   const dispatch = useDispatch()
-  const token = localStorage.getItem('token')
   const router = useRouter();
 
-  const {user_id, title, description, rating, publisher, upload_date} = course
+  const {user_id, title, description, rating, upload_date} = course
   const { user } = state
 
   useEffect(() => {
-    if(token) dispatch(Auth(token))
-  }, [token])
-
-  useEffect(() => {
-    if(token) dispatch(Courses(token))
-  }, [token, course.courses])
+    if(user.token) dispatch(Courses(user.token))
+  }, [course.courses])
 
   const handleChangeInput = (props) => {
     const {name, value} = props.target
@@ -57,16 +51,16 @@ const Create = () => {
     router.push('/course/all')
   }
 
-  if(!token && !user.token) return router.push('/login')
+  if(!user.token) return router.push('/login')
 
   return (
-    <>
+    <div>
       <title> Create Course </title>
       {
         user && user.info && user.info.admin
         && <Course course={course} handleSubmit={handleSubmit} handleChangeInput={handleChangeInput}/>
       }
-    </>
+    </div>
   )
 }
 

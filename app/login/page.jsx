@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, Suspense, useEffect } from "react"
+import { useState } from "react"
 import { login } from '../../services/loginService'
 import Link from "next/link"
 import { useRouter } from 'next/navigation'
@@ -16,7 +16,6 @@ const Login = () => {
 
   const [user1, setUser] = useState(initialState)
   const dispatch = useDispatch()
-  const token = localStorage.getItem("token");
   const state = useSelector(state => state)
   const { user } = state;
 
@@ -33,17 +32,16 @@ const Login = () => {
 
     const data = await login({ email, password })
     if(!data.success) return dispatch(Error(data.msg))
-
+    localStorage.setItem("token", data.refresh_token)
     dispatch(Auth(data.refresh_token))
     dispatch(Success(data.msg))
-    localStorage.setItem("token", data.refresh_token);
     router.push('/')
   }
 
-  if(token && user.token) return router.push('/')
+  if(user.token) return router.push('/')
 
   return (
-    <>
+    <div>
       <title> Login </title>
         <div className="login_page">
             <form onSubmit={handleSubmit}>
@@ -66,7 +64,7 @@ const Login = () => {
                 <p>Create New Account? <Link href="/signup" color="red"> Register Now </Link></p>
             </form>
         </div>
-    </>
+    </div>
   )
 }
 

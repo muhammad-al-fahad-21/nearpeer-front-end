@@ -1,6 +1,6 @@
 'use client'
 
-import {useState, Suspense } from "react"
+import { useState } from "react"
 import { signup } from '../../services/signupService'
 import Link from "next/link"
 import { useRouter } from 'next/navigation'
@@ -24,7 +24,6 @@ const Signup = () => {
     const [user1, setUser] = useState(initialState)
     const router = useRouter();
     const dispatch = useDispatch()
-    const token = localStorage.getItem("token");
     const state = useSelector(state => state)
     const { user } = state;
 
@@ -52,10 +51,10 @@ const Signup = () => {
         router.push('/')
     }
 
-    if(token && user.token) return router.push('/')
+    if(user.token) return router.push('/')
       
     return (
-        <>
+        <div>
             <title> Signup </title>
             <div className="login_page">
                 <form onSubmit={handleSubmit}>
@@ -117,7 +116,7 @@ const Signup = () => {
                     <p>Already an account? <Link href="/login"> Login Now </Link></p>
                 </form>
             </div>
-        </>
+        </div>
     )
 }
 

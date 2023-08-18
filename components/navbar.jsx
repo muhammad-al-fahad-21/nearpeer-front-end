@@ -1,28 +1,32 @@
 import Link from 'next/link'
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { logoutUser } from '../services/userDetailsService'
-import { deleteData } from '../store/user'
+import { Auth, deleteData } from '../store/user'
 import { Error, Success } from '../store/model'
 import { useSelector, useDispatch } from 'react-redux'
+import { useRouter } from "next/navigation"
 
 const Navbar = () => {
-    const token = localStorage.getItem("token");
-
     const navRef = useRef();
     const state = useSelector(state => state);
     const dispatch = useDispatch()
+    const router = useRouter()
     const { user } = state
 
-    const logoutAuth = async (token) => {;
-        const message = await logoutUser(token);
+    const logoutAuth = async (props) => {;
+        const message = await logoutUser(props);
         if(!message.success) return dispatch(Error(message.msg))
 
         dispatch(deleteData())
-        localStorage.removeItem("token")
         dispatch(Success(message.msg))
+        localStorage.removeItem("token")
+        return router.push('/login')
     }
 
-    if(!token) return <></>
+  if(!user.token) return (
+    <div>
+    </div>
+  )
 
   return (
     <div style={{position: "sticky", width: "100%", top: 0}}>

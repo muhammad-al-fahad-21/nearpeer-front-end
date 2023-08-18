@@ -34,7 +34,7 @@ const getAllUsers = ({ users, info }) => {
     }, [model.delete])
 
   return (
-    <>
+    <div>
         <table className="table__body">
             <thead>
                 <tr>
@@ -76,7 +76,7 @@ const getAllUsers = ({ users, info }) => {
                     }
             </tbody>
         </table>
-    </>
+    </div>
 
   )
 }

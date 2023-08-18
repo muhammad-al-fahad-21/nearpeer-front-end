@@ -6,7 +6,6 @@ import CourseId from '../../../components/course'
 import { useRouter } from 'next/navigation'
 import { useSelector, useDispatch } from 'react-redux'
 import { Success, Error } from '../../../store/model'
-import { Auth } from '../../../store/user'
 import { Course } from '../../../store/course'
 
 const initialState = {
@@ -25,17 +24,15 @@ const Update = ({ params: {id} }) => {
   const router = useRouter();
   const state = useSelector(state => state)
   const dispatch = useDispatch()
-  const token = localStorage.getItem('token')
 
   const {user_id, title, description, rating, publisher, last_update, upload_date} = userCourse
   const { user, course } = state
 
   useEffect(() => {
-    if(token) {
-      dispatch(Auth(token))
-      dispatch(Course(token, id))
+    if(user.token) {
+      dispatch(Course(user.token, id))
     }
-  }, [token])
+  }, [course.course])
 
   const handleChangeInput = (props) => {
     const {name, value} = props.target
@@ -73,17 +70,17 @@ const Update = ({ params: {id} }) => {
     router.push('/course/all')
   }
 
-  if(!token && !user.token) return router.push('/login')
+  if(!user.token) return router.push('/login')
 
   return (
-    <>
-    <title> Update Course </title>
-  
-    {
-      user && user.info && user.info.admin
-      && <CourseId course={userCourse} handleSubmit={handleSubmit} handleChangeInput={handleChangeInput} id={id}/>
-    }
-    </>
+    <div>
+      <title> Update Course </title>
+    
+      {
+        user && user.info && user.info.admin
+        && <CourseId course={userCourse} handleSubmit={handleSubmit} handleChangeInput={handleChangeInput} id={id}/>
+      }
+    </div>
   )
 }
 

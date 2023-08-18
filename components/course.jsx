@@ -3,7 +3,7 @@ const Course = ({course, handleSubmit, handleChangeInput, id}) => {
     const {user_id, title, description, rating, last_update, upload_date} = course
 
   return (
-    <>
+    <div>
         <div className="login_page">
             <form onSubmit={handleSubmit}>
                 <div>
@@ -49,7 +49,7 @@ const Course = ({course, handleSubmit, handleChangeInput, id}) => {
                 </div>
             </form>
         </div>
-    </>
+    </div>
   )
 }
 

@@ -1,8 +1,7 @@
 'use client'
 
-import { Suspense, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Auth } from '../../../store/user'
 import { User } from '../../../store/course'
 import { useRouter } from 'next/navigation'
 
@@ -11,18 +10,13 @@ const Courses = () => {
   const state = useSelector(state => state)
   const dispatch = useDispatch()
   const router = useRouter();
-  const token = localStorage.getItem("token")
   const { course, user } = state
 
   useEffect(() => {
-    if(token) dispatch(Auth(token))
-  }, [token])
-
-  useEffect(() => {
-    if(user.token) dispatch(User(token))
+    if(user.token) dispatch(User(user.token))
   }, [user.token])
 
-  if(!token && !user.token) return router.push('/login')
+  if(!user.token) return router.push('/login')
   
   return (
     <>

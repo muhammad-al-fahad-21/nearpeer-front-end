@@ -1,8 +1,7 @@
-'use client'
+"use client"
 
 import '../styles/globals.css'
 import '@fortawesome/fontawesome-svg-core/styles.css';
-import { Suspense } from 'react';
 import { Provider } from 'react-redux'
 import { store } from '../store/storeConfigure';
 import Notify from '../components/notify';
@@ -19,12 +18,12 @@ const RootLayout = ({ children }) => {
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossOrigin="anonymous"></script>
       </head>
       <body>
-      <Provider store={store}>
-        <Notify/>
-        <Navbar/>
-        <AdminAccess/>
-        {children}
-      </Provider>
+        <Provider store={store}>
+          <Notify/>
+          <Navbar/>
+          <AdminAccess/>
+          {children}
+        </Provider>
       </body>
     </html>
   )

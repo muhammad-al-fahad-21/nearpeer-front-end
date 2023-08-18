@@ -8,11 +8,11 @@ const Notify = () => {
    const dispatch = useDispatch();
    const { model } = state
 
-   return(
-    <>
+   return (
+    <div>
        {model.error && <Notification msg={{msg: model.error, title: "Error"}} handleShadow={() => dispatch(Error(''))} bgColor="bg-danger"/>}
        {model.success && <Notification msg={{msg: model.success, title: "Success"}} handleShadow={() => dispatch(Success(''))} bgColor="bg-success"/>}
-    </>
+    </div>
    )
 }
 
