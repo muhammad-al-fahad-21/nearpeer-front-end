@@ -51,8 +51,8 @@ const Courses = () => {
                                 <td title={courses.description.length > 20 && courses.description}>{courses.description && (courses.description).substring(0, 20) + (courses.description.length > 20 ? '...' : '')}</td>
                                 <td>{courses.rating}</td>
                                 <td>{courses.publisher}</td>
-                                <td>{courses.last_update}</td>
-                                <td>{courses.upload_date}</td>
+                                <td>{new Date(courses.last_update).toDateString()}</td>
+                                <td>{new Date(courses.upload_date).toDateString()}</td>
                             </tr>
                         ))
                     }

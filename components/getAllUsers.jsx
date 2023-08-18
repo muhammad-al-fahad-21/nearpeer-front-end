@@ -58,7 +58,7 @@ const getAllUsers = ({ users, info }) => {
                                 <td>{user.name}</td>
                                 <td>{user.email}</td>
                                 <td>{user.city && (user.city).substring(0, 21) + '...'}</td>
-                                <td>{user.dob}</td>
+                                <td>{new Date(user.dob).toDateString()}</td>
                                 <td>{user.phone}</td>
                                 <td>{user.gender}</td>
                                 <td>{user.admin ? <i class="far fa-check-circle fa-lg" style={{color: 'green'}}></i> : <i class="far fa-times-circle fa-lg" style={{color: 'red'}}></i>}</td>

@@ -56,8 +56,6 @@ const Profile = () => {
 
         if(password !== confirm_password) return dispatch(Error('Password do not match!'))
 
-        if(!email || !password || !city || !dob || !phone || gender === "select") return dispatch(Error('Please fill all the fields!'))
-
         const data = await updateUser(user.token, {name, email, password, city, dob, phone, gender})
 
         if(!data.success) return dispatch(Error(data.msg))

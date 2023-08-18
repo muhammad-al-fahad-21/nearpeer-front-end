@@ -59,8 +59,8 @@ const getAllCourses = ({ courses }) => {
                                 <td title={course.description.length > 20 && course.description}>{course.description && (course.description).substring(0, 20) + (course.description.length > 20 ? '...' : '')}</td>
                                 <td>{course.rating}</td>
                                 <td>{course.publisher}</td>
-                                <td>{course.last_update}</td>
-                                <td>{course.upload_date}</td>
+                                <td>{new Date(course.last_update).toDateString()}</td>
+                                <td>{new Date(course.upload_date).toDateString()}</td>
                                 <td style={{display: 'flex', alignItems: 'center'}}>
                                     <Link href={`/course/${course.id}`}><button style={{color: 'green', fontSize: '16px', borderWidth: '2px', padding: '10px', borderRadius: '15px', borderColor: 'darkgreen'}}> Update  </button></Link>
                                     <Link href='/course/all'><button style={{color: 'red', fontSize: '16px', marginLeft: '20px', borderWidth: '2px', padding: '10px', borderRadius: '15px', borderColor: 'darkred'}} onClick={() => dispatch(Delete(course))} > Delete </button></Link>
