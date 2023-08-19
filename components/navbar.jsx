@@ -31,9 +31,8 @@ const Navbar = () => {
     }
 
   return (
-    <div>
+    <div style={{position: "sticky", width: "100%", top: 0}}>
         { show &&
-        <div style={{position: "sticky", width: "100%", top: 0}}>
             <nav className="navbar navbar-expand-lg navbar-light bg-primary sticky">
                 <div className="container-fluid" >
                 <div className='d-flex'>
@@ -59,7 +58,6 @@ const Navbar = () => {
                 </div>
                 </div>
             </nav>
-        </div>
         }
     </div>
   )
