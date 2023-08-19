@@ -33,7 +33,7 @@ const Update = ({ params: {id} }) => {
       dispatch(Course(user.token, id))
     }
     else return router.push('/login')
-  }, [course.course])
+  }, [user.token])
 
   const handleChangeInput = (props) => {
     const {name, value} = props.target
