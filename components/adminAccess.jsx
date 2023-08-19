@@ -13,6 +13,7 @@ const adminAccess = () => {
     useEffect(() => {
       const token = localStorage.getItem("token")
       if(token) setShow(true)
+      else setShow(false)
   }, [user.token])
 
   return (
