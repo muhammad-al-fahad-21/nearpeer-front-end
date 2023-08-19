@@ -1,22 +1,27 @@
 'use client'
 
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import { useEffect } from 'react'
+import { Auth } from '../store/user'
 
 const Page = () => {
 
   const router = useRouter();
-  const state = useSelector(state => state);
+  const dispatch = useDispatch();
+  const state = useSelector(state => state)
   const { user } = state
 
   useEffect(() => {
-    if(!user.token) return router.push('/login')
-  }, [])
+    const token = localStorage.getItem("token")
+    
+    if(token) dispatch(Auth(token))
+    else return router.push('/login')
+  }, [user.token])
 
   return (
-    <div>
+    <section>
       <title> Dashboard </title>
       <main className="flex min-h-screen flex-col items-center justify-between p-24">
         <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
@@ -125,7 +130,7 @@ const Page = () => {
           </a>
         </div>
       </main>
-    </div>
+    </section>
   )
 }
 

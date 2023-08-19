@@ -5,6 +5,7 @@ import { updateUser } from "../../services/userDetailsService"
 import { useDispatch, useSelector } from 'react-redux'
 import { Success, Error } from '../../store/model'
 import { useRouter } from 'next/navigation'
+import { Auth } from "../../store/user"
 
 const initialState = {
     name: '',
@@ -31,6 +32,15 @@ const Profile = () => {
         const {name, value} = props.target
         setUser({...user1, [name]:value })
     }
+    useEffect(() => {
+        const token = localStorage.getItem("token")
+        if(token) {
+            dispatch(Auth(token))
+            return router.push('/profile')
+        } else {
+            return router.push('/login')
+        }
+    }, [])
 
     useEffect(() => {
         if(user.token && user.info) setUser({
@@ -42,11 +52,7 @@ const Profile = () => {
             phone: user.info.phone,
             gender: user.info.gender
         })
-        else {
-            return router.push("/login")
-        }
-
-    }, [user])
+    }, [user.token])
 
     const handleSubmit = async (props) => {
         props.preventDefault()

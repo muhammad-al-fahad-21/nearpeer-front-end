@@ -23,7 +23,8 @@ const Login = () => {
   const {email, password } = user1
 
   useEffect(() => {
-    if(user.token) return router.push('/')
+    const token = localStorage.getItem("token")
+    if(token) return router.push('/')
   }, [])
 
   const handleChangeInput = (props) => {
@@ -39,7 +40,7 @@ const Login = () => {
     localStorage.setItem("token", data.refresh_token)
     dispatch(Auth(data.refresh_token))
     dispatch(Success(data.msg))
-    router.push('/')
+    return router.push('/')
   }
 
   return (
