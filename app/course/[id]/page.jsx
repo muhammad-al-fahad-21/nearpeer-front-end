@@ -3,7 +3,7 @@
 import {useEffect, useState } from 'react'
 import { updateCourse } from '../../../services/courseService'
 import CourseId from '../../../components/course'
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/navigation'
 import { useSelector, useDispatch } from 'react-redux'
 import { Success, Error } from '../../../store/model'
 import { Course } from '../../../store/course'
