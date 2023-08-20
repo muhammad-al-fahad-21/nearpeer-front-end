@@ -21,7 +21,7 @@ const Page = () => {
   }, [user.token])
 
   return (
-    <section>
+    <div>
       <title> Dashboard </title>
       <main className="flex min-h-screen flex-col items-center justify-between p-24">
         <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
@@ -130,7 +130,7 @@ const Page = () => {
           </a>
         </div>
       </main>
-    </section>
+    </div>
   )
 }
 

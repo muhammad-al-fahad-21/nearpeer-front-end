@@ -218,6 +218,20 @@ thead th:hover {
     padding: 10px 20px;
     border-radius: 15px;
   }
+
+  @media screen and (max-width: 768px) {
+    .outer-wrapper {
+        margin: 5px auto;
+        max-width: 95%;
+        max-height: 95%;   
+    }
+    .inner-wrapper { 
+        overflow-y: scroll;
+        overflow-x: scroll;
+        height: fit-content;    
+        margin: 5px auto;
+    }
+  }
   
   
   

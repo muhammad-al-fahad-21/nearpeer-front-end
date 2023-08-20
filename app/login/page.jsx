@@ -64,7 +64,10 @@ const Login = () => {
                     <button type="submit" >Login</button>
                 </div>
 
-                <p>Create New Account? <Link href="/signup" color="red"> Register Now </Link></p>
+                <div className="link">
+                  <p>Create New Account? <Link href="/signup" color="red"> Register Now </Link></p>
+                  <p>Do you forget password? <Link href="/forget_password" color="red"> Forget </Link></p>
+                </div>
             </form>
         </div>
     </div>

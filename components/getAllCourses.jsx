@@ -34,44 +34,47 @@ const getAllCourses = ({ courses }) => {
 
   return (
     <div>
-        <table className="table__body">
-            <thead>
-                <tr>
-                    <th> Id </th>
-                    <th> User_Id </th>
-                    <th> Title </th>
-                    <th> Description </th>
-                    <th> Rating </th>
-                    <th> Publisher </th>
-                    <th> Last Update </th>
-                    <th> Upload Date </th>
-                    <th> Action </th>
-                </tr>
-            </thead>
+        <div class="outer-wrapper">
+            <div class="inner-wrapper">
+                <table className="table__body">
+                    <thead>
+                        <tr>
+                            <th> Id </th>
+                            <th> User_Id </th>
+                            <th> Title </th>
+                            <th> Description </th>
+                            <th> Rating </th>
+                            <th> Publisher </th>
+                            <th> Last Update </th>
+                            <th> Upload Date </th>
+                            <th> Action </th>
+                        </tr>
+                    </thead>
 
-            <tbody>
-                    {
-                        courses && courses.map((course) => (
-                            <tr key = {course.id}>
-                                <td>{course.id}</td>
-                                <td>{course.user_id}</td>
-                                <td>{course.title && (course.title).substring(0, 20)}</td>
-                                <td title={course.description.length > 20 && course.description}>{course.description && (course.description).substring(0, 20) + (course.description.length > 20 ? '...' : '')}</td>
-                                <td>{course.rating}</td>
-                                <td>{course.publisher}</td>
-                                <td>{new Date(course.last_update).toDateString()}</td>
-                                <td>{new Date(course.upload_date).toDateString()}</td>
-                                <td style={{display: 'flex', alignItems: 'center'}}>
-                                    <Link href={`/course/${course.id}`}><button style={{color: 'green', fontSize: '16px', borderWidth: '2px', padding: '10px', borderRadius: '15px', borderColor: 'darkgreen'}}> Update  </button></Link>
-                                    <Link href='/course/all'><button style={{color: 'red', fontSize: '16px', marginLeft: '20px', borderWidth: '2px', padding: '10px', borderRadius: '15px', borderColor: 'darkred'}} onClick={() => dispatch(Delete(course))} > Delete </button></Link>
-                                </td>
-                            </tr>
-                        ))
-                    }
-            </tbody>
-        </table>
+                    <tbody>
+                            {
+                                courses && courses.map((course) => (
+                                    <tr key = {course.id}>
+                                        <td>{course.id}</td>
+                                        <td>{course.user_id}</td>
+                                        <td>{course.title && (course.title).substring(0, 20)}</td>
+                                        <td title={course.description.length > 20 && course.description}>{course.description && (course.description).substring(0, 20) + (course.description.length > 20 ? '...' : '')}</td>
+                                        <td>{course.rating}</td>
+                                        <td>{course.publisher}</td>
+                                        <td>{new Date(course.last_update).toDateString()}</td>
+                                        <td>{new Date(course.upload_date).toDateString()}</td>
+                                        <td style={{display: 'flex', alignItems: 'center'}}>
+                                            <Link href={`/course/${course.id}`}><button style={{color: 'green', fontSize: '16px', borderWidth: '2px', padding: '10px', borderRadius: '15px', borderColor: 'darkgreen'}}> Update  </button></Link>
+                                            <Link href='/course/all'><button style={{color: 'red', fontSize: '16px', marginLeft: '20px', borderWidth: '2px', padding: '10px', borderRadius: '15px', borderColor: 'darkred'}} onClick={() => dispatch(Delete(course))} > Delete </button></Link>
+                                        </td>
+                                    </tr>
+                                ))
+                            }
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
-
   )
 }
 

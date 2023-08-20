@@ -57,7 +57,7 @@ const Profile = () => {
     const handleSubmit = async (props) => {
         props.preventDefault()
 
-        if(password !== confirm_password) return dispatch(Error('Password do not match!'))
+        if(password !== confirm_password) return dispatch(Error('Password does not match!'))
 
         const data = await updateUser(user.token, {name, email, password, city, dob, phone, gender})
 

@@ -31,12 +31,6 @@ body {
   color: #444;
   padding: 0 15px;
 }
-.login_page h2{
-  text-transform: uppercase;
-  font-size: 2rem;
-  margin: 20px 0;
-  letter-spacing: 1.5px;
-}
 
 .login_page input{
   width: 100%;
@@ -66,10 +60,7 @@ body {
 }
 
 .login_page .row{
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap-reverse;
-  align-items: flex-start;
+  justify-content: center;
 }
 
 .login_page .row button{
@@ -93,6 +84,24 @@ body {
   font-weight: 600;
 }
 
+.login_page .link {
+  display: block;
+  position: relative;;
+  margin-top: 20px;
+}
+
+.login_page .link p {
+  margin: 7px 100px;
+}
+
+.login_page .link p:nth-child(2) {
+  margin: 7px 113px;
+}
+
+.login_page .signup {
+  margin: 20px 120px;
+}
+
 .container {
   max-width: 600px;
   margin: 200px auto;
@@ -107,8 +116,24 @@ h1 {
   margin-bottom: 20px;
 }
 
+.nav-css {
+  position: sticky;
+  width: 100%;
+  top: 0;
+  left: 0;
+}
+
+.icon {
+  width: 32px;
+  height: 32px;
+  margin-top: 10px;
+}
+
 /*--------------------- User Course Lists -----------------------*/
 @import url('./course.css');
 
 /*--------------------- Loader -----------------------*/
 @import url('./loader.css');
+
+/*-------------------- Responsive Design -------------*/
+@import url('./responsive.css');

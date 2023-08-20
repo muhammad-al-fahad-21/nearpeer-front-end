@@ -1,4 +1,3 @@
-
 class LoginService {
 
     async login(post) {

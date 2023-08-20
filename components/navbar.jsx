@@ -5,6 +5,7 @@ import { deleteData } from '../store/user'
 import { Error, Success } from '../store/model'
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouter } from "next/navigation"
+import Image from 'next/image'
 
 const Navbar = () => {
     const navRef = useRef();
@@ -31,20 +32,26 @@ const Navbar = () => {
     }
 
   return (
-    <div style={{position: "sticky", width: "100%", top: 0}}>
+    <div className='nav-css'>
         { show &&
-            <nav className="navbar navbar-expand-lg navbar-light bg-primary sticky">
+            <nav className="navbar navbar-expand-lg navbar-light bg-primary">
                 <div className="container-fluid" >
                 <div className='d-flex'>
                 <div style={{marginTop: "5px"}}>
                     <Link href='/' legacyBehavior>
-                        <a className="navbar-brand mx-2 text-light"> Dashboard </a>
+                        <Image src='/nearpeer.png' alt='Nearpeer' width={50} height={50} style={{cursor: 'pointer'}}/>
                     </Link>
                 </div>
                     <nav ref={navRef} className='d-flex my-2 navbar-link'>
-                        <Link href='/course/user' legacyBehavior><a className='mx-4'style={{textDecoration: 'none', color: 'white'}}> Course </a></Link>
+                        <Link href='/course/user' legacyBehavior><a className='mx-4'style={{textDecoration: 'none', color: 'white'}}> User Courses </a></Link>
                         <Link href='/profile' legacyBehavior><a className='mx-4' style={{textDecoration: 'none', color: 'white'}}> Profile </a></Link>
-                        { user.info && user.info.admin && <Link href='/course/all' legacyBehavior><a className='mx-4' style={{textDecoration: 'none', color: 'white'}}> Courses </a></Link> }
+                        { user.info && user.info.admin && 
+                            <div>
+                                <Link href='/course/all' legacyBehavior><a className='mx-4' style={{textDecoration: 'none', color: 'white'}}> All Courses </a></Link>
+                                <Link href='/course/create' legacyBehavior><a className='mx-4' style={{textDecoration: 'none', color: 'white'}}> Add Course </a></Link>
+                                <Link href='/users' legacyBehavior><a className='mx-4' style={{textDecoration: 'none', color: 'white'}}> All Users </a></Link>
+                            </div>  
+                        }
                     </nav>
                 </div>
                 <div className="justify-content-end" style={{marginRight: 50}}>

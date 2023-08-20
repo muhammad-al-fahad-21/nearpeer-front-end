@@ -35,47 +35,51 @@ const getAllUsers = ({ users, info }) => {
 
   return (
     <div>
-        <table className="table__body">
-            <thead>
-                <tr>
-                    <th> Id </th>
-                    <th> Name </th>
-                    <th> Email </th>
-                    <th> City </th>
-                    <th> Date Of Birth </th>
-                    <th> Phone </th>
-                    <th> Gender </th>
-                    <th> isAdmin </th>
-                    <th> Action </th>
-                </tr>
-            </thead>
+        <div class="outer-wrapper">
+            <div class="inner-wrapper">
+                <table className="table__body">
+                    <thead>
+                        <tr>
+                            <th> Id </th>
+                            <th> Name </th>
+                            <th> Email </th>
+                            <th> City </th>
+                            <th> Date Of Birth </th>
+                            <th> Phone </th>
+                            <th> Gender </th>
+                            <th> isAdmin </th>
+                            <th> Action </th>
+                        </tr>
+                    </thead>
 
-            <tbody>
-                    {
-                        users && users.map((user) => (
-                            <tr key = {user.id}>
-                                <td>{user.id}</td>
-                                <td>{user.name}</td>
-                                <td>{user.email}</td>
-                                <td>{user.city && (user.city).substring(0, 21) + '...'}</td>
-                                <td>{new Date(user.dob).toDateString()}</td>
-                                <td>{user.phone}</td>
-                                <td>{user.gender}</td>
-                                <td>{user.admin ? <i class="far fa-check-circle fa-lg" style={{color: 'green'}}></i> : <i class="far fa-times-circle fa-lg" style={{color: 'red'}}></i>}</td>
-                                { 
-                                    info.id !== user.id && <td style={{display: 'flex', alignItems: 'center'}}>
-                                        <Link href={`/users/${user.id}`}><button style={{color: 'green', fontSize: '16px', borderWidth: '2px', padding: '10px', borderRadius: '15px', borderColor: 'darkgreen'}}> Update  </button></Link>
-                                        <Link href='/users'>
-                                            <button style={{color: 'red', fontSize: '16px', marginLeft: '20px', borderWidth: '2px', padding: '10px', borderRadius: '15px', borderColor: 'darkred'}} 
-                                            onClick={() => dispatch(Delete(user))}> Delete </button>
-                                        </Link>
-                                    </td>
-                                }
-                            </tr>
-                        ))
-                    }
-            </tbody>
-        </table>
+                    <tbody>
+                            {
+                                users && users.map((user) => (
+                                    <tr key = {user.id}>
+                                        <td>{user.id}</td>
+                                        <td>{user.name}</td>
+                                        <td>{user.email}</td>
+                                        <td>{user.city && (user.city).substring(0, 21) + '...'}</td>
+                                        <td>{new Date(user.dob).toDateString()}</td>
+                                        <td>{user.phone}</td>
+                                        <td>{user.gender}</td>
+                                        <td>{user.admin ? <i class="far fa-check-circle fa-lg" style={{color: 'green'}}></i> : <i class="far fa-times-circle fa-lg" style={{color: 'red'}}></i>}</td>
+                                        { 
+                                            info.id !== user.id && <td style={{display: 'flex', alignItems: 'center'}}>
+                                                <Link href={`/users/${user.id}`}><button style={{color: 'green', fontSize: '16px', borderWidth: '2px', padding: '10px', borderRadius: '15px', borderColor: 'darkgreen'}}> Update  </button></Link>
+                                                <Link href='/users'>
+                                                    <button style={{color: 'red', fontSize: '16px', marginLeft: '20px', borderWidth: '2px', padding: '10px', borderRadius: '15px', borderColor: 'darkred'}} 
+                                                    onClick={() => dispatch(Delete(user))}> Delete </button>
+                                                </Link>
+                                            </td>
+                                        }
+                                    </tr>
+                                ))
+                            }
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
   )
